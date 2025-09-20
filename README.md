@@ -26,7 +26,7 @@ $ sudo make install
 $ sudo apt-get update
 $ sudo apt-get install iverilog
 ```
-![Alt Text](Images/Icarus verilog.png)
+![Alt Text](Images/Icarusverilog.png)
 
 #### <ins>**Gtkwave**</ins>
 ```bash
