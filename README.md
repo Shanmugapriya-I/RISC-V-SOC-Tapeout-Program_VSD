@@ -11,7 +11,7 @@
 - Ubuntu 20.04 or higher
 - 4 vCPU
 
-#### <ins>**Yosys**</ins>
+### <ins>**Yosys**</ins>
 ```bash
 $ sudo apt-get update
 $ git clone https://github.com/YosysHQ/yosys.git
@@ -27,14 +27,14 @@ $ sudo make install
 ```
 ![Alt Text](Images/Yosys.png)
 
-#### <ins>**Icarus Verilog**</ins>
+### <ins>**Icarus Verilog**</ins>
 ```bash
 $ sudo apt-get update
 $ sudo apt-get install iverilog
 ```
 ![Alt Text](Images/IcarusVerilog.png)
 
-#### <ins>**Gtkwave**</ins>
+### <ins>**Gtkwave**</ins>
 ```bash
 $ sudo apt-get update
 $ sudo apt install gtkwave
