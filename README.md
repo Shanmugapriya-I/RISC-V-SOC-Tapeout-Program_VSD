@@ -1,9 +1,15 @@
-# RISC-V-SOC-Tapeout-Program_VSD
+# RISC V SOC Tapeout Program VSD
 
 <details>
   <summary>Week 0 </summary>
 
 # Week 0 - Tools Installation
+
+### **System Requirements**
+- 6 GB RAM
+- 50 GB HDD
+- Ubuntu 20.04 or higher
+- 4 vCPU
 
 #### <ins>**Yosys**</ins>
 ```bash
