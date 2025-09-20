@@ -19,7 +19,9 @@ $ make config-gcc
 $ make
 $ sudo make install
 
-![Week 1 Screenshot](week1.png)  
-*(Upload your image named `week1.png` to the repo root)*
+<img width="830" height="525" alt="image" src="https://github.com/user-attachments/assets/21861274-f6ce-4d6c-bf3c-5a27cf0552eb" />
+
+
+
 
 
