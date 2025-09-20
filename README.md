@@ -19,4 +19,6 @@ $ make config-gcc
 $ make
 $ sudo make install
 
-![Terminal output screenshot](Screenshot-from-2025-09-19-23-09-02.jpg)
+![Yosys terminal output](image/Yosys.jpg)
+
+
