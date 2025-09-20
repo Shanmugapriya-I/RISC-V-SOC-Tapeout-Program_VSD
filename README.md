@@ -6,7 +6,7 @@
 # Week 0 - Tools Installation
 
 ### Yosys
-
+```python
 $ sudo apt-get update
 $ git clone https://github.com/YosysHQ/yosys.git
 $ cd yosys
