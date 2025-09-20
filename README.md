@@ -22,7 +22,4 @@ $ sudo make install
 ![Week 1 Screenshot](week1.png)  
 *(Upload your image named `week1.png` to the repo root)*
 
-### Code
-```python
-print("Hello from Week 1!")
 
