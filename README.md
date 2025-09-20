@@ -18,9 +18,3 @@ libboost-python-dev libboost-filesystem-dev zlib1g-dev
 $ make config-gcc
 $ make
 $ sudo make install
-
-
-
-
-
-
