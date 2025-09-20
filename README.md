@@ -5,8 +5,8 @@
 
 # Week 0 - Tools Installation
 
-### Yosys
-```python
+#### <ins>**Yosys**</ins>
+```bash
 $ sudo apt-get update
 $ git clone https://github.com/YosysHQ/yosys.git
 $ cd yosys
@@ -18,7 +18,7 @@ libboost-python-dev libboost-filesystem-dev zlib1g-dev
 $ make config-gcc
 $ make
 $ sudo make install
-
-![Yosys terminal output](image/Yosys.jpg)
+```
+![Alt Text](Images/Yosys.png)
 
 
