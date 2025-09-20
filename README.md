@@ -21,4 +21,18 @@ $ sudo make install
 ```
 ![Alt Text](Images/Yosys.png)
 
+#### <ins>**Icarus Verilog**</ins>
+```bash
+$ sudo apt-get update
+$ sudo apt-get install iverilog
+```
+![Alt Text](Images/Icarus verilog.png)
+
+#### <ins>**Gtkwave**</ins>
+```bash
+$ sudo apt-get update
+$ sudo apt install gtkwave
+```
+![Alt Text](Images/gtkwave.png)
+
 
