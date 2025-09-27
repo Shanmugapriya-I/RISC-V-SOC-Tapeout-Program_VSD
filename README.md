@@ -273,10 +273,292 @@ This can be realized just by wiring.
 So we expect no hardware which is also seen in the screenshot below, analysis after synthesis and show. The command 'abc' is not required for mapping when there are no cells.
 
 ![Alt Text](Images/Mul8Block.png)
+
 </details>
 
 <details>
-	<summary>Day 3 - Combinational and Sequential Optimizations </summary>
+    <summary>Day 3</summary>
+
+# Day 3 - Combinational and Sequential Optimizations
+
+## Introduction to Optimizations
+
+### Combinational Logic Optimization
+It means squeezing the logic to get the most optimized design in terms of area and power. the most commonly used techniques are:
+1) Constant propagation using direct optimization
+2) Boolean logic optimization using K-map and Quine McKlusky
+
+An example of constant propagation optimization is highlighted below.
+
+![Alt Text](Images/ConstantPropagation.png)
+
+An example of boolean optimization is highlighted below.
+
+![Alt Text](Images/BooleanLogicOptimization.png)
+
+### Sequential Logic Optimization
+The technqiues used are:
+1) Basic
+   - Sequential constant propagation
+2) Advanced (not covered as part of lab)
+   - Static optimization
+   - Retiming
+   - Sequential logic cloning (floorplan aware synthesis)
+
+An example of sequential constant propagation is highlighted below of DFF with asynchronous reset where D input is grounded. To note, the same technique cannot be applied to DFF with the asynchronous set because while `Q=1` when `Set=1`, but `Q=0` at `Set=0` at the next CLK pulse. Q is dependent not only on Set but also on the clock edge.
+
+![Alt Text](Images/SequentialConstantpng)
+
+Retiming is a technique to improve the performance of the circuit.
+
+![Alt Text](Images/StateOpt.png)
+
+## Combinational Logic Optimizations
+Commands for optimization
+
+```
+opt_clean -purge
+```
+### Optimization of opt_check.v
+Syntax for opt_check.v
+```
+module opt_check (input a , input b , output y);
+        assign y = a?b:0;
+endmodule
+```
+For opt_check.v the assignment `y = a?b:0` reduces to `y = ab`. The screenshot shown below explains this
+
+![Alt Text](Images/OptCheck.png)
+
+The logic implementation after synthesis for opt_check.v is shown below, showing only AND gate.
+
+![Alt Text](Images/OptCheckBlock.png)
+
+
+### Optimization of opt_check2.v
+Syntax for opt_check2.v
+```
+module opt_check2 (input a , input b , output y);
+        assign y = a?1:b;
+endmodule
+```
+For opt_check2.v the assignment `y = a?1:b` reduces to `y = a + b`. 
+
+The logic implementation after synthesis for opt_check2.v is shown below, showing only OR gate.
+
+![Alt Text](Images/OptCheck2Block.png)
+
+### Optimization of opt_check3.v
+Syntax for opt_check3.v
+```
+module opt_check3 (input a , input b, input c , output y);
+	assign y = a?(c?b:0):0;
+endmodule
+```
+For opt_check.v the assignment `y = a?(c?b:0):0` reduces to `y = abc`. The screenshot shown below explains this.
+
+![Alt Text](Images/OptLogic.png)
+
+The logic implementation after synthesis for opt_check3.v is shown below, showing 3 input AND gate.
+
+![Alt Text](Images/OptCheck3Block.png)
+
+### Optimization of multiple_module_opt.v
+
+Syntax of multiple_module_opt.v
+```
+module sub_module1(input a , input b , output y);
+ assign y = a & b;
+endmodule
+
+module sub_module2(input a , input b , output y);
+ assign y = a^b;
+endmodule
+
+module multiple_module_opt(input a , input b , input c , input d , output y);
+wire n1,n2,n3;
+
+sub_module1 U1 (.a(a) , .b(1'b1) , .y(n1));
+sub_module2 U2 (.a(n1), .b(1'b0) , .y(n2));
+sub_module2 U3 (.a(b), .b(d) , .y(n3));
+
+assign y = c | (b & n1); 
+endmodule
+```
+The logic implementation after synthesis for multiple_module_opt.v is shown below
+
+![Alt Text](Images/MultipleModuleOpt.png)
+
+## Sequential Logic Optimizations
+
+Both the dff_const1.v and dff_const2 are explained below.
+
+![Alt Text](Images/SequentialLogic.png)
+
+### Optimizing dff_const1.v
+
+Syntax for dff_const1.v
+```
+module dff_const1(input clk, input reset, output reg q);
+always @(posedge clk, posedge reset)
+begin
+	if(reset)
+		q <= 1'b0;
+	else
+		q <= 1'b1;
+end
+
+endmodule
+```
+For dff_const1.v, `q=0` as long as `reset=1`. However, when `reset=0` `q` doesn't immediately becomes `1` rather at the next rising edge of the `clk` as shown below. ***So the optimization cannot be applied***.
+
+![Alt Text](Images/TbDffConst1.png)
+
+The commands to run the synthesis
+```
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog dff_const1.v
+synth -top dff_const1
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+
+The logic implementation after synthesis for dff_const1.v is shown below.
+
+![Alt Text](Images/DffConst1Block.png)
+
+***complete dff_const2,4,5***
+
+### Optimizing dff_const3.v
+
+Syntax for dff_const3.v
+```
+module dff_const3(input clk, input reset, output reg q);
+reg q1;
+
+always @(posedge clk, posedge reset)
+begin
+	if(reset)
+	begin
+		q <= 1'b1;
+		q1 <= 1'b0;
+	end
+	else
+	begin
+		q1 <= 1'b1;
+		q <= q1;
+	end
+end
+
+endmodule
+```
+For dff_const3.v, there are two flops.  `q1=0` as long as `reset=1`. However, when `reset=0` `q1` doesn't immediately becomes `1` rather at the next rising edge of the `clk` with some propagation delay as shown below. `q=1` as long as `reset=1`, acting as `set` rather than `reset`. However, when `reset=0` `q` samples `q1` as `0` as there are some propagation delay for `q1`as shown below. At the next `clk` edge `q` samples `q1` as `1`.
+***So the optimization cannot be applied***.
+
+<img width="973" alt="14-dff-const3" src="https://github.com/sukanyasmeher/sfal-vsd/assets/166566124/6bf8a7c4-07f1-4f70-9878-e2773b3eeab5">
+
+The command to run HDL simulation
+```
+iverilog dff_const3.v tb_dff_const3.v
+./a.out
+gtkwave tb_dff_const3.vcd
+```
+The HDL simulation is shown below.
+
+<img width="997" alt="15-dff-const3" src="https://github.com/sukanyasmeher/sfal-vsd/assets/166566124/3e9440d3-a562-4365-90fb-d17e8ea5c7a2">
+
+The commands to run the synthesis
+```
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog dff_const3.v
+synth -top dff_const3
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+
+The logic implementation after synthesis for dff_const3.v is shown below.
+
+<img width="1066" alt="16-dff-const3" src="https://github.com/sukanyasmeher/sfal-vsd/assets/166566124/6d30d2b7-0c21-464f-9dad-02db228e8c5c">
+
+## Sequential Optimzations for Unused Outputs
+
+### Optimization of Case1: 3-bit Up Counter with q[0] used (counter_opt.v)
+Example of a counter where bits at the position of [2] and [1] are unused.
+
+```
+module counter_opt (input clk , input reset , output q);
+reg [2:0] count;
+assign q = count[0];
+
+always @(posedge clk ,posedge reset)
+begin
+	if(reset)
+		count <= 3'b000;
+	else
+		count <= count + 1;
+end
+
+endmodule
+```
+The screenshot explains the logic of the counter. Only q[0] is used. ***So the optimization can be applied***.
+
+<img width="1200" alt="17-counter" src="https://github.com/sukanyasmeher/sfal-vsd/assets/166566124/dbdbd8d5-a305-4f31-b8ba-a8c33d53d67a">
+
+The commands to run the synthesis
+```
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog counter_opt.v
+synth -top counter_opt
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+We see only one flop after the synthesis and also seen in synthesis report after `synth -top counter_opt.v`
+
+<img width="1672" alt="18-counter-opt" src="https://github.com/sukanyasmeher/sfal-vsd/assets/166566124/42d260a1-72bc-4d5f-b891-9fea58a57813">
+
+### Optimization of Case2: 3-bit Up Counter (counter_opt2.v)
+
+Example of a counter where all the bits are used.
+```
+module counter_opt (input clk , input reset , output q);
+reg [2:0] count;
+assign q = (count[2:0] == 3'b100);
+
+always @(posedge clk ,posedge reset)
+begin
+	if(reset)
+		count <= 3'b000;
+	else
+		count <= count + 1;
+end
+
+endmodule
+```
+The commands to run the synthesis
+```
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog counter_opt.v
+synth -top counter_opt
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+We see only 3 flops after the synthesis and also seen in synthesis report after `synth -top counter_opt.v`
+<img width="829" alt="19-counter-opt2" src="https://github.com/sukanyasmeher/sfal-vsd/assets/166566124/a7c68bda-5619-4dd6-89d4-d8773c1bf345">
+
+<img width="1669" alt="20-counter-opt2" src="https://github.com/sukanyasmeher/sfal-vsd/assets/166566124/95bbe05c-bdde-4bdd-8fe7-492be015dc9f">
+
+<img width="1167" alt="21-counter-opt2" src="https://github.com/sukanyasmeher/sfal-vsd/assets/166566124/11cd582b-4ccd-4b99-82e2-1c68c92db131">
+
+</details>
+
+	
+
+
+
 
 
 
