@@ -41,6 +41,8 @@ $ sudo apt install gtkwave
 ```
 ![Alt Text](Images/gtkwave.png)
 
+</details>
+
 
 <details>
   <summary>Week 1 </summary>
@@ -138,6 +140,8 @@ The same testbench can be used to verify RTL and Synthesized Netlist.
 ![Alt Text](Images/GoodMuxCode.png)
 
 ![Alt Text](Images/GoodMuxDotViewer.png)
+
+</details>
 
 
 
