@@ -114,6 +114,7 @@ The output of the iverilog is a .vcd file and a.out file is created. By executin
 gtkwave will be used to generate the waveforms and display in visual format.
 
 Command to view the vcd file in gtkwave 
+
 ```
 gtkwave tb_good_mux.vcd
 ```
