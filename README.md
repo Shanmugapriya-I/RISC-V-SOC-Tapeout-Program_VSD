@@ -42,6 +42,8 @@ $ sudo apt install gtkwave
 ![Alt Text](Images/gtkwave.png)
 
 <details>
+
+<details>
   <summary>Week 1 </summary>
 
 # Week 1 
