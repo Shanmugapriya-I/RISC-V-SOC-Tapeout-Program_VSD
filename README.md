@@ -550,7 +550,7 @@ It happens because of the following reasons
 
 As shown in the screenshot below, `always` block is evaluated only when `sel` is changing. So output `y` is not evaluated when `sel` is not changing although `i0` and `i1` are changing. Rather it acts like a latch. The code on the right side represents the correct design coding for `mux`. In this case `always` is evaluated for any signal changes. 
 
-![Alt Text](Images/MissingSensitivityList.png)
+![Alt Text](Images/MissingList.png)
 
 ### <ins>**(2) Blocking vs Non-blocking Assignments**</ins>
 
@@ -578,7 +578,7 @@ When synthesized, both will lead to the same circuit. However, simulation will r
 
 This issue is resolved by using ***non-blocking statements***.
 
-![Alt Text](Images/Caveats.png)
+![Alt Text](Images/Caveat.png)
 
 ### <ins>**Labs on GLS and Synthesis-Simulation Mismatch**</ins>
 
