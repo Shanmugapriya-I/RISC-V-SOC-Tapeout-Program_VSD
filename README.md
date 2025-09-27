@@ -46,7 +46,6 @@ $ sudo apt install gtkwave
 <details>
   <summary>Week 1 </summary>
 
-# Week 1 
 
    <details>
        <summary>Day 1 </summary>
