@@ -186,7 +186,7 @@ Report after synthesizing multiple_modules.v. As shown below the sub_modules sta
 
 Hierarchy is preserved. sub_module1 and sub_module2 are instantiated separately in the synthesized Verilog netlist. Rather than seeing AND or OR gate, we see sub_modules when we run the command 'show' as shown in the screenshot.
 
-![Alt Text](Images/SubmoduleBlock.png)
+![Alt Text](Images/SubmodeleBlock.png)
 
 If we look into the sub_module2 in synthesized netlist 'multiple_modules_hier.v', we see that rather than OR gate, the inputs a & b, pass through the inverter and then NAND gate. It is because in CMOS, stacking PMOS, which happens in 'OR' gate is bad as PMOS has lower mobility and always have to be wider to get some meaningful output. The next step is to check .lib file for the answer.
 
