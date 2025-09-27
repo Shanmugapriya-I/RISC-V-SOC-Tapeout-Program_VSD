@@ -401,7 +401,7 @@ endmodule
 ```
 The logic implementation after synthesis for multiple_module_opt.v is shown below.
 
-![Alt Text](Images/MultipleModelOpt.png)
+![Alt Text](Images/MultipleModuleOpt.png)
 
 ### <ins>**Sequential Logic Optimizations**</ins>
 
@@ -610,7 +610,7 @@ show
 write_verilog ternary_operator_mux_net.v
 ```
 
-![Alt Text](Images/TernaryBlock.png)
+![Alt Text](Images/TernarayBlock.png)
 
 The commands to do GLS for ternary_operator_mux.v
 ```
