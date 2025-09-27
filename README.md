@@ -407,7 +407,7 @@ The logic implementation after synthesis for multiple_module_opt.v is shown belo
 
 Both the dff_const1.v and dff_const2 are explained below.
 
-![Alt Text](Images/SequentialLogic.png)
+![Alt Text](Images/SequentialLogics.png)
 
 ### <ins>**Optimizing dff_const1.v**</ins>
 
