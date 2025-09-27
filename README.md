@@ -47,6 +47,9 @@ $ sudo apt install gtkwave
 <details>
   <summary>Week 1 </summary>
 
+  <details>
+    <summary>Day 1</summary>
+
 # Week 1 - Introduction to Verilog RTL design and Synthesis
 
 # Day 1 - Introduction to Verilog RTL Design and Synthesis
@@ -140,6 +143,8 @@ The same testbench can be used to verify RTL and Synthesized Netlist.
 ![Alt Text](Images/GoodMuxCode.png)
 
 ![Alt Text](Images/GoodMuxDotViewer.png)
+
+</details>
 
 </details>
 
