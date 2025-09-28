@@ -917,7 +917,7 @@ iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_
 gtkwave tb_incomp_if.vcd
 ```
 
-### <ins>** Experiment: incomp_if2.v**
+### <ins>**Experiment: incomp_if2.v**
 
 ```
 module incomp_if2 (input i0, i1, i2, i3, output reg y);
@@ -972,7 +972,7 @@ iverilog incomp_case.v tb_incomp_case.v
 ./a.out
 gtkwave tb_incomp_case.vcd
 ```
-![Alt Text](Images/IncompCaseWave.png)
+![Alt Text](Images/IfcompCaseWave.png)
 
 
 **Synthesis Analysis:**
@@ -986,7 +986,7 @@ abc -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 write_verilog -noattr incomp_case_net.v
 show
 ```
-![Alt Text](Images/IncompCaseBlock.png)
+![Alt Text](Images/InCompCaseBlock.png)
 
 **Synthesis Result:** Similar to incomplete if statements, the missing cases result in latch inference. The synthesized circuit includes memory elements for the uncovered selector values.
 
