@@ -743,7 +743,7 @@ When we write an `if` statement in Verilog, we're not just creating a conditiona
 
 ### <ins>**Priority Logic Architecture**</ins>
 
-```verilog
+```bash
 // This RTL description...
 always @(*) begin
     if (condition1)
@@ -763,7 +763,7 @@ end
 
 The most critical issue in synthesis occurs when we write incomplete conditional statements:
 
-```verilog
+```bash
 // Creates unwanted latch
 always @(*) begin
     if (en)t
@@ -776,7 +776,7 @@ end
 
 ### <ins>**Proper Combinational Logic**</ins>
 
-```verilog
+```bash
 // Complete specification
 always @(*) begin
     if (enable)
@@ -790,7 +790,7 @@ end
 
 In sequential circuits, incomplete if statements are often intentional:
 
-```verilog
+```bash
 //  Sequential counter logic
 always @(posedge clk or posedge reset) begin
     if (reset)
@@ -808,7 +808,7 @@ Case statements provide a different approach to multi-way selection, synthesizin
 
 ### <ins>**Basic Multiplexer Implementation**</ins>
 
-```verilog
+```bash
 always @(*) begin
     case (selector)
         2'b00: output = input0;
@@ -824,7 +824,8 @@ This creates a clean 4:1 multiplexer in hardware - much more efficient than equi
 ### <ins>**Three Critical Pitfalls**</ins>
 
 ### <ins>**Caveat 1: Incomplete Case Coverage**</ins>
-```verilog
+
+```bash
 // Missing cases
 case (select)
     2'b00: y = a;
@@ -835,7 +836,8 @@ endcase
 **Solution:** Always include a `default` case to handle uncovered conditions.
 
 ### <ins>**Caveat 2: Partial Assignment**</ins>
-```verilog
+
+```bash
 // Inconsistent assignments
 case (mode)
     2'b00: begin
@@ -850,7 +852,8 @@ endcase
 **Solution:** Ensure all outputs are assigned in every case branch.
 
 ### <ins>**Caveat 3: Overlapping Cases**</ins>
-```verilog
+
+```bash
 // Ambiguous specification
 case (sel)
     2'b00: y = a;
@@ -868,7 +871,7 @@ We begin our practical investigation with two critical test cases that demonstra
 
 ### <ins>**Experiment: incomp_if.v**</ins>
 
-```verilog
+```bash
 module incomp_if (input i0, i1, i2, output reg y);
 always @(*) begin
     if(i0)
@@ -916,7 +919,7 @@ gtkwave tb_incomp_if.vcd
 
 ### <ins>** Experiment: incomp_if2.v**
 
-```verilog
+```bash
 module incomp_if2 (input i0, i1, i2, i3, output reg y);
 always @(*) begin
     if(i0)
@@ -931,6 +934,7 @@ endmodule
 ![Alt Text](Images/IncompIf2Wave.png)
 
 **Synthesis Analysis:**
+
 ```bash
 # Yosys Synthesis Flow
 read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
@@ -948,7 +952,7 @@ Our investigation continues with systematic analysis of case statement behaviors
 
 ### <ins>**Experiment: incomp_case.v**</ins>
 
-```verilog
+```bash
 module incomp_case (input i0, i1, i2, input [1:0] sel, output reg y);
 always @(*) begin
     case(sel)
@@ -972,6 +976,7 @@ gtkwave tb_incomp_case.vcd
 
 
 **Synthesis Analysis:**
+
 ```bash
 # Yosys Synthesis Flow
 read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
@@ -997,7 +1002,7 @@ gtkwave tb_incomp_if.vcd
 
 ### <ins>**Experiment: comp_case.v (Complete Case)**</ins>
 
-```verilog
+```bash
 module comp_case (input i0, i1, i2, input [1:0] sel, output reg y);
 always @(*) begin
     case(sel)
@@ -1020,6 +1025,7 @@ gtkwave tb_incomp_case.vcd
 
 
 **Synthesis Analysis:**
+
 ```bash
 # Yosys Synthesis Flow
 read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
@@ -1045,7 +1051,7 @@ gtkwave tb_incomp_if.vcd
 
 ### <ins>**Experiment: bad_case.v (Overlapping Cases)**</ins>
 
-```verilog
+```bash
 module bad_case (input i0, i1, i2, i3, input [1:0] sel, output reg y);
 always @(*) begin
     case(sel)
@@ -1069,6 +1075,7 @@ gtkwave tb_bad_case.vcd
 
 
 **Synthesis Analysis:**
+
 ```bash
 # Yosys Synthesis Flow
 read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
@@ -1094,7 +1101,7 @@ gtkwave tb_incomp_if.vcd
 
 ### <ins>**Experiment: partial_case_assign.v**</ins>
 
-```verilog
+```bash
 module partial_case_assign (input i0, i1, i2, input [1:0] sel, 
                            output reg y, x);
 always @(*) begin
