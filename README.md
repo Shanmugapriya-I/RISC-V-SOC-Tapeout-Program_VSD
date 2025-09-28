@@ -729,9 +729,395 @@ The GLS output is shown below. In this case, `d` takes the current value of `x` 
 
 </details>
 
+<details>
+
+ <summary>Day 5 </summary>
+
+ ## **Day 5- Optimization in Synthesis**
+
+### <ins>**If-Case Constructs**</ins>
+
+### <ins>**Understanding If Statements in Hardware Context**</ins>
+
+When we write an `if` statement in Verilog, we're not just creating a conditional check - we're describing hardware behavior. The synthesis tool interprets these constructs and creates actual digital circuits.
+
+### <ins>**Priority Logic Architecture**</ins>
+
+```verilog
+// This RTL description...
+always @(*) begin
+    if (condition1)
+        output = input1;
+    else if (condition2)
+        output = input2;
+    else if (condition3)
+        output = input3;
+    else
+        output = default_value;
+end
+```
+
+ Creates a **priority encoder** followed by a **multiplexer chain** in hardware. The first condition has the highest priority, and the evaluation proceeds sequentially until a match is found.
+
+### <ins>**The Latch Inference Trap**</ins>
+
+The most critical issue in synthesis occurs when we write incomplete conditional statements:
+
+```verilog
+// Creates unwanted latch
+always @(*) begin
+    if (en)t
+        data_out = data_in;
+    // Missing else clause!
+end
+```
+
+**Why does this happen?** When `enable` is false, the synthesis tool doesn't know what value `data_out` should take. To maintain the previous value, it infers a **D-latch** - creating sequential behavior in what should be combinational logic.
+
+### <ins>**Proper Combinational Logic**</ins>
+
+```verilog
+// Complete specification
+always @(*) begin
+    if (enable)
+        data_out = data_in;
+    else
+        data_out = 1'b0;  // Explicit default
+end
+```
+
+### <ins>** When Latches Are Acceptable**</ins>
+
+In sequential circuits, incomplete if statements are often intentional:
+
+```verilog
+//  Sequential counter logic
+always @(posedge clk or posedge reset) begin
+    if (reset)
+        counter <= 0;
+    else if (increment)
+        counter <= counter + 1;
+    // No else needed - register holds value
+end
+```
+---
+
+### <ins>**Case Statements: Parallel Selection Logic**</ins>
+
+Case statements provide a different approach to multi-way selection, synthesizing into **multiplexers** rather than priority logic.
+
+### <ins>**Basic Multiplexer Implementation**</ins>
+
+```verilog
+always @(*) begin
+    case (selector)
+        2'b00: output = input0;
+        2'b01: output = input1;
+        2'b10: output = input2;
+        2'b11: output = input3;
+    endcase
+end
+```
+
+This creates a clean 4:1 multiplexer in hardware - much more efficient than equivalent if-else chains for parallel selection.
+
+### <ins>**Three Critical Pitfalls**</ins>
+
+### <ins>**Caveat 1: Incomplete Case Coverage**</ins>
+```verilog
+// Missing cases
+case (select)
+    2'b00: y = a;
+    2'b01: y = b;
+    // What happens for 2'b10 and 2'b11?
+endcase
+```
+**Solution:** Always include a `default` case to handle uncovered conditions.
+
+### <ins>**Caveat 2: Partial Assignment**</ins>
+```verilog
+// Inconsistent assignments
+case (mode)
+    2'b00: begin
+        x = data1;
+        y = data2;  // Both assigned
+    end
+    2'b01: begin
+        x = data3;  // y not assigned - latch inferred!
+    end
+endcase
+```
+**Solution:** Ensure all outputs are assigned in every case branch.
+
+### <ins>**Caveat 3: Overlapping Cases**</ins>
+```verilog
+// Ambiguous specification
+case (sel)
+    2'b00: y = a;
+    2'b01: y = b;
+    2'b10: y = c;
+    2'b1?: y = d;  // Overlaps with 2'b10!
+endcase
+```
+
+Unlike if-else statements (which have built-in priority), overlapping cases create undefined behavior.
+
+### <ins>**Incomplete If Analysis**</ins>
+
+We begin our practical investigation with two critical test cases that demonstrate latch inference in action.
+
+### <ins>**Experiment: incomp_if.v**</ins>
+
+```verilog
+module incomp_if (input i0, i1, i2, output reg y);
+always @(*) begin
+    if(i0)
+        y <= i1;
+    // Deliberately incomplete
+end
+endmodule
+```
+
+**Laboratory Procedure:**
+
+```bash
+# RTL Simulation
+iverilog incomp_if.v tb_incomp_if.v
+./a.out
+gtkwave tb_incomp_if.vcd
+```
+
+![Alt Text](Images/IncompIfWave.png)
+
+**Observations from RTL Simulation:** The waveform shows expected behavior - when `i0` is high, `y` follows `i1`. When `i0` is low, `y` maintains its previous value.
+
+**Synthesis Analysis:**
+
+```bash
+# Yosys Synthesis Flow
+read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog incomp_if.v
+synth -top incomp_if
+abc -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+
+![Alt Text](Images/IncompIfBlock.png)
+
+**Critical Discovery:** The synthesis output reveals a D-latch connected to a multiplexer. This is hardware we didn't intend to create! The latch enables the "memory" behavior observed in simulation.
+
+**GLS Wave**
+
+```bash
+iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v incomp_if_net.v tb_incomp_if.v
+./a.out
+gtkwave tb_incomp_if.vcd
+```
+
+### <ins>** Experiment: incomp_if2.v**
+
+```verilog
+module incomp_if2 (input i0, i1, i2, i3, output reg y);
+always @(*) begin
+    if(i0)
+        y <= i1;
+    else if (i2)
+        y <= i3;
+    // Still incomplete - no final else
+end
+endmodule
+```
+
+![Alt Text](Images/IncompIf2Wave.png)
+
+**Synthesis Analysis:**
+```bash
+# Yosys Synthesis Flow
+read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog incomp_if2.v
+synth -top incomp_if2
+abc -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+
+![Alt Text](Images/IncompIf2Block.png)
+
+### <ins>**Case Statement Exploration**</ins>
+
+Our investigation continues with systematic analysis of case statement behaviors and their synthesis implications.
+
+### <ins>**Experiment: incomp_case.v**</ins>
+
+```verilog
+module incomp_case (input i0, i1, i2, input [1:0] sel, output reg y);
+always @(*) begin
+    case(sel)
+        2'b00: y = i0;
+        2'b01: y = i1;
+        // Missing 2'b10 and 2'b11 cases
+    endcase
+end
+endmodule
+```
+
+**Lab Procedure**
+
+```bash
+# RTL Simulation
+iverilog incomp_case.v tb_incomp_case.v
+./a.out
+gtkwave tb_incomp_case.vcd
+```
+![Alt Text](Images/IncompCaseWave.png)
 
 
+**Synthesis Analysis:**
+```bash
+# Yosys Synthesis Flow
+read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog incomp_case.v
+synth -top incomp_case
+abc -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+write_verilog -noattr incomp_case_net.v
+show
+```
+![Alt Text](Images/IncompCaseBlock.png)
 
+**Synthesis Result:** Similar to incomplete if statements, the missing cases result in latch inference. The synthesized circuit includes memory elements for the uncovered selector values.
+
+
+**GLS Wave**
+
+```bash
+iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v incomp_if_net.v tb_incomp_if.v
+./a.out
+gtkwave tb_incomp_if.vcd
+```
+![Alt Text](Images/IncompCaseGLSWave.png)
+
+### <ins>**Experiment: comp_case.v (Complete Case)**</ins>
+
+```verilog
+module comp_case (input i0, i1, i2, input [1:0] sel, output reg y);
+always @(*) begin
+    case(sel)
+        2'b00: y = i0;
+        2'b01: y = i1;
+        default: y = i2;  // Covers remaining cases
+    endcase
+end
+endmodule
+```
+**Lab Procedure**
+
+```bash
+# RTL Simulation
+iverilog comp_case.v tb_comp_case.v
+./a.out
+gtkwave tb_incomp_case.vcd
+```
+![Alt Text](Images/CompCaseWave.png)
+
+
+**Synthesis Analysis:**
+```bash
+# Yosys Synthesis Flow
+read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog comp_case.v
+synth -top comp_case
+abc -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+write_verilog -noattr comp_case_net.v
+show
+```
+![Alt Text](Images/CompCaseBlock.png)
+
+**Synthesis Result:** Clean multiplexer implementation with no latches. This demonstrates the importance of complete case coverage.
+
+**GLS Wave**
+
+```bash
+iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v incomp_if_net.v tb_incomp_if.v
+./a.out
+gtkwave tb_incomp_if.vcd
+```
+![Alt Text](Images/CompCaseGLSWave.png)
+
+
+### <ins>**Experiment: bad_case.v (Overlapping Cases)**</ins>
+
+```verilog
+module bad_case (input i0, i1, i2, i3, input [1:0] sel, output reg y);
+always @(*) begin
+    case(sel)
+        2'b00: y = i0;
+        2'b01: y = i1;
+        2'b10: y = i2;
+        2'b1?: y = i3;  // Wildcard overlaps with 2'b10
+    endcase
+end
+endmodule
+```
+**Lab Procedure**
+
+```bash
+# RTL Simulation
+iverilog bad_case.v tb_bad_case.v
+./a.out
+gtkwave tb_bad_case.vcd
+```
+![Alt Text](Images/BadCaseWave.png)
+
+
+**Synthesis Analysis:**
+```bash
+# Yosys Synthesis Flow
+read_liberty -lib ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog bad_case.v
+synth -top bad_case
+abc -liberty ../my_lib/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+write_verilog -noattr comp_case_net.v
+show
+```
+![Alt Text](Images/BadCaseBlock.png)
+
+
+**Critical Insight:** The wildcard pattern `2'b1?` matches both `2'b10` and `2'b11`, creating ambiguity. Synthesis tools may resolve this differently than simulation, leading to **functional mismatches**.
+
+**GLS Wave**
+
+```bash
+iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v incomp_if_net.v tb_incomp_if.v
+./a.out
+gtkwave tb_incomp_if.vcd
+```
+![Alt Text](Images/BadCaseGLSWave.png)
+
+### <ins>**Experiment: partial_case_assign.v**</ins>
+
+```verilog
+module partial_case_assign (input i0, i1, i2, input [1:0] sel, 
+                           output reg y, x);
+always @(*) begin
+    case(sel)
+        2'b00: begin
+            y = i0;
+            x = i2;  // Both outputs assigned
+        end
+        2'b01: y = i1;  // Only y assigned - x gets latch!
+        default: begin
+            x = i1;
+            y = i2;
+        end
+    endcase
+end
+endmodule
+```
+![Alt Text](Images/PartialCaseBlock.png)
+
+**Synthesis Analysis:** The output reveals **mixed behavior** - `y` is purely combinational, while `x` has a latch for the `2'b01` case. This creates a circuit with both combinational and sequential elements from a single always block.
+
+</details>
+</details>
   
   
 
