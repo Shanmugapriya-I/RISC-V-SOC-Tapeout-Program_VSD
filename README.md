@@ -786,7 +786,7 @@ always @(*) begin
 end
 ```
 
-### <ins>** When Latches Are Acceptable**</ins>
+### <ins>**When Latches Are Acceptable**</ins>
 
 In sequential circuits, incomplete if statements are often intentional:
 
