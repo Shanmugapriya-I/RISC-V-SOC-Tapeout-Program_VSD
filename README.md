@@ -1323,26 +1323,30 @@ The repo used for the reference is - https://github.com/manili/VSDBabySoC?tab=re
 
 1. Make sure that the tools `iverilog` and `GTKwave` are properly installed.
 2. Install `sandpiper-saas` with the following commands
+
    ```
-  $sudo apt update
-  $sudo apt install python3-pip
-  $python3 -m venv myenv
-  $source myenv/bin/activate
-  $pip install pyyaml click sandpiper-saas
+   $sudo apt update
+   $sudo apt install python3-pip
+   $python3 -m venv myenv
+   $source myenv/bin/activate
+   $pip install pyyaml click sandpiper-saas
    ```
 3. After installing, check if `sandpiper-saas` is present in the path with the command `which sandpiper-saas`. You should get a local path name as shown below.
+
    ```
-  $which sandpiper-saas
-  /home/shanmugapriya/myenv/bin/sandpiper-saas
+   $which sandpiper-saas
+   /home/shanmugapriya/myenv/bin/sandpiper-saas
    ```
 
 4. Now we can clone this repository in an arbitrary directory (we'll choose home directory here):
+
    ```
    cd ~
    git clone https://github.com/manili/VSDBabySoC.git
    ```
-5. RVMYTH is designed and created by the TL-Verilog language. So we need a way for compile and transform it to the Verilog language and use the 
+6. RVMYTH is designed and created by the TL-Verilog language. So we need a way for compile and transform it to the Verilog language and use the 
    result in our SoC. Here the `sandpiper-saas` will help us do the job.
+   
    ```
    cd VSDBabySoC
    sandpiper-saas -i ./src/module/*.tlv -o rvmyth.v --bestsv --noline -p verilog --outdir ./src/module/
@@ -1352,6 +1356,7 @@ The repo used for the reference is - https://github.com/manili/VSDBabySoC?tab=re
 6. Create an `output` directory inside `VSDBabySoC` using the command `mkdir output`.
      
 7. Compile and Simulate the design.
+
    ```
    iverilog -o output/pre_synth_sim.out -DPRE_SYNTH_SIM src/module/testbench.v -I src/include -I src/module
    cd output
@@ -1359,9 +1364,11 @@ The repo used for the reference is - https://github.com/manili/VSDBabySoC?tab=re
    ```
      
 8. Open simulation waveform in GTKwave tool
+
    ```
    gtkwave pre_synth_sim.out
    ```
+
 ![Alt Text](Images/InstallingSandpiper.png)
 
 ![Alt Text](Images/BabySocWave.png)
