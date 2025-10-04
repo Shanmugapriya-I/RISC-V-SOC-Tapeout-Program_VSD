@@ -1300,10 +1300,9 @@ A PLL typically consists of three main components:
    3. Types of DACs:
       - There are primarily two common types of DACs:
          - Weighted Resistor DAC: Uses resistors with different weights to convert the digital signal into an analog voltage.
+         - R-2R Ladder DAC: Uses a repeating network of resistors to achieve the same effect, allowing for simpler design and easier scaling.
 
     ![Alt Text](Images/WeightedDAC.jpg)
-
-         - R-2R Ladder DAC: Uses a repeating network of resistors to achieve the same effect, allowing for simpler design and easier scaling.
 
     ![Alt Text](Images/R2RLadder.png)
 
