@@ -1301,10 +1301,9 @@ A PLL typically consists of three main components:
       - There are primarily two common types of DACs:
          - Weighted Resistor DAC: Uses resistors with different weights to convert the digital signal into an analog voltage.
          - R-2R Ladder DAC: Uses a repeating network of resistors to achieve the same effect, allowing for simpler design and easier scaling.
+![Alt Text](Images/WeightedDAC.jpg)
 
-    ![Alt Text](Images/WeightedDAC.jpg)
-
-    ![Alt Text](Images/R2RLadder.png)
+![Alt Text](Images/R2RLadder.png)
 
    4. In VSDBabySoC:
       - In the VSDBabySoC design, we are utilizing a 10-bit DAC, which means it can take a digital input represented by 10 bits and convert it into an analog output.
