@@ -1462,16 +1462,17 @@ rename -enumerate
 stat
 write_verilog -noattr /home/iraj/VLSI/VSDBabySoC/output/post_synth_sim/vsdbabysoc.synth.v
 ```
+
 **Result:** `vsdbabysoc.synth.v` generated successfully — ready for Gate-Level Simulation.
 
 ![Alt Text](Images/Photo1.png)
 ![Alt Text](Images/Photo2.png)
-![Alt Text](Images/Screenshot from 2025-10-11 20-49-53.png)
-![Alt Text](Images/Screenshot from 2025-10-11 20-50-20.png)
-![Alt Text](Images/Screenshot from 2025-10-11 20-51-04.png)
-![Alt Text](Images/Screenshot from 2025-10-11 20-51-21.png)
-![Alt Text](Images/Screenshot from 2025-10-11 21-09-53.png)
-![Alt Text](Images/Screenshot from 2025-10-11 21-09-58.png)
+![Alt Text](Images/Photo3.png)
+![Alt Text](Images/Photo4.png)
+![Alt Text](Images/Photo5.png)
+![Alt Text](Images/Photo6.png)
+![Alt Text](Images/Photo7.png)
+![Alt Text](Images/Photo8.png)
 
 
 ### Compile
@@ -1492,8 +1493,9 @@ cd /home/iraj/VLSI/VSDBabySoC/output/post_synth_sim/
 ```
 ### View Waveforms
 
-```																																				   
-gtkwave post_synth_sim.vcd                                                                                                                              ```                                                                                                                               
+```
+gtkwave post_synth_sim.vcd
+```
 
 ![Alt Text](Images/WaveformComparision.png)
 
