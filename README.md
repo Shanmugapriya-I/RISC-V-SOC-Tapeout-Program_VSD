@@ -2181,7 +2181,7 @@ Id=kn⋅(Vgt⋅Vmin−Vmin^2/2)⋅(1+λVds) , where Vmin is the minimum of Vgt, 
 
 ### <ins>**CMOS Voltage transfer characteristics**</ins>
 
-### <ins>**a)MOSFET as switch**</ins
+### <ins>**a)MOSFET as switch**</ins>
 
 A CMOS inverter consists of a PMOS and NMOS transistor connected in series between supply voltage (Vdd) and ground (Vss), with their gates driven by the input signal. When the input voltage is high and equal to Vdd, the PMOS transistor is turned off while the NMOS transistor is turned on, causing the output node to discharge toward Vss through the on-resistance of the NMOS. The load capacitance (CL) discharges via the conducting NMOS, and the output voltage drops. MOS transistors act as voltage-controlled switches: they show infinite off-resistance when the gate-source voltage (∣Vgs∣) is less than the threshold voltage (∣Vt∣), and finite on-resistance when ∣Vgs∣ exceeds ∣Vt∣. This switching characteristic enables digital logic operation, with precise control over output transitions in response to input changes.	
 
@@ -2189,7 +2189,7 @@ A CMOS inverter consists of a PMOS and NMOS transistor connected in series betwe
 ![Alt Text](Images/mosfetswitch2.jpeg)
 
 
-### <ins>**b)Introduction to standard MOS voltage current parameters**</ins
+### <ins>**b)Introduction to standard MOS voltage current parameters**</ins>
 
 The voltages and currents in a CMOS inverter are defined as follows: each MOSFET has gate (G), source (S), and drain (D) terminals. The gate-source voltage (Vgs) controls device operation, while the drain-source voltage (Vds) is crucial for current flow. The PMOS has VgsP and VdsP, and the NMOS has VgsN and VdsN. During logic transitions, the NMOS can discharge the load capacitance (CL), sourcing drain-to-source current (IdsN), while the PMOS can recharge it via its drain-to-source current (IdsP). When Vin=Vdd, a current path exists from the output to the ground, resulting in Vout=0; when Vin=0, the current path is from the supply to the output, setting Vout=Vdd. These relationships define the switching behavior and output logic levels in CMOS digital circuits.
 
