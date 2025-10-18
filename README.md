@@ -1942,3 +1942,182 @@ The following plots summarize the timing results across 13 PVT corners.
 
 </details>
 
+<details>
+  <summary>Week 4 </summary>
+
+<details>
+    <summary>Day 1 </summary>
+
+## **Day 1 - Basics of NMOS(Id vs Vds)**
+
+### <ins>**Introduction to Circuit Design and SPICE Simulations**</ins>
+
+### <ins>**a)Why do we need SPICE simulation?**</ins>
+
+               The content describes fundamental principles and detailed analysis of CMOS inverter design, power-aware clock tree synthesis, buffer tree architectures, and the use of SPICE simulations for circuit validation. Key topics include the behavior of CMOS inverters using complementary NMOS and PMOS transistors, voltage transfer characteristics, power consumption, and noise immunity. The buffer tree approach is explained in the context of evenly distributing capacitive loads and minimizing delay using multi-level buffering, with detailed capacitance and delay tables demonstrating practical design decisions. Additionally, the importance of balanced load driving and buffer selection at each level is emphasized. SPICE simulations are highlighted as essential for visualizing dynamic voltage and current behavior and for validating the inverter's theoretical performance in real circuits.
+
+![Alt Text](Images/whyspice1.jpeg)
+![Alt Text](Images/whyspice2.jpeg)
+![Alt Text](Images/whyspice3.jpeg)
+![Alt Text](Images/whyspice4.jpeg)
+![Alt Text](Images/whyspice5.jpeg)
+![Alt Text](Images/whyspice6.jpeg)
+
+### <ins>**b)Introduction to basic element in circuit design - NMOS**</ins>
+
+            An NMOS transistor is a four-terminal device consisting of a p-type substrate, two n+ diffusion regions (source and drain), a gate made of polysilicon or metal, and a gate oxide layer for insulation. The source, drain, and body are typically grounded, while the gate voltage controls channel formation. When the gate-source voltage (Vgs) is zero, no conductive channel exists, and the source-drain resistance remains high since both substrate-source and substrate-drain diodes are reverse biased. Applying a positive VgsVgs attracts negative charges under the gate oxide, repelling mobile holes and forming a conductive n-channel between source and drain. This process is fundamental for turning the NMOS device “on” or “off,” defining its role in digital switches and amplifiers.
+
+![Alt Text](Images/basicelement1.jpeg)	
+![Alt Text](Images/basicelement2.jpeg)
+![Alt Text](Images/basicelement3.jpeg)
+![Alt Text](Images/basicelement4.jpeg)
+![Alt Text](Images/basicelement5.jpeg)
+
+### <ins>**c)Strong inversion and Threshold Voltage**</ins>
+
+            A MOSFET consists of four main terminals: gate, source, drain, and bulk (substrate), with the substrate typically being p-type and the source and drain regions heavily doped n-type. When no gate-to-source voltage (Vgs=0), the device’s substrate-source and substrate-drain junctions act as p-n diodes and remain off, resulting in high resistance between source (S) and drain (D). Applying a positive gate voltage attracts electrons, forming a conductive n-type channel at the semiconductor surface under the gate; this is called strong inversion, and the required gate voltage is known as the threshold voltage (Vt). Further increase in VgsVgs draws electrons from the n+ source into the region under the gate, maintaining the n-type channel and enabling current flow from drain to source. The conductivity of the channel is modulated by the gate voltage, allowing precise voltage control over current between the source and drain terminals.
+
+
+![Alt Text](Images/stronginversion1.jpeg)	
+![Alt Text](Images/stronginversion2.jpeg)	
+![Alt Text](Images/stronginversion3.jpeg)	
+![Alt Text](Images/stronginversion4.jpeg)
+![Alt Text](Images/stronginversion5.jpeg)	
+![Alt Text](Images/stronginversion6.jpeg)	
+
+### <ins>**d)Threshold voltage with positive substrate voltage**</ins>
+
+            When the substrate-to-source bias (Vsb) is zero, the semiconductor surface inverts to n-type material once the gate-to-source voltage (Vgs) reaches the threshold voltage (Vto). However, when a positive substrate bias is applied, it causes additional reverse bias between the source and substrate, increasing the depletion region width near the source. Consequently, a higher gate voltage (Vgs=Vto+V1) is required for the surface to invert to n-type material. This effect, known as the body effect or substrate bias effect, means that with higher substrate bias, a greater threshold voltage is needed to form a conductive channel between source and drain, requiring an increase in the applied gate voltage.
+
+![Alt Text](Images/substratevoltage1.jpeg)
+![Alt Text](Images/substratevoltage2.jpeg)
+![Alt Text](Images/substratevoltage3.jpeg)
+![Alt Text](Images/substratevoltage4.jpeg)
+![Alt Text](Images/substratevoltage5.jpeg)
+
+### <ins>**NMOS resistive region and saturation region of operation**</ins>
+
+### <ins>**a)Resistive region of operation with small drain - source voltage**</ins>
+
+           The threshold gate-to-source voltage (Vgs) required for strong inversion in a MOSFET is known as the threshold voltage (Vt). When VgsVgs exceeds Vt, the device enters resistive operation, and the formation of the inversion layer enables current flow between source and drain. As VgsVgs increases beyond the threshold, more electrons are attracted to the region under the gate, expanding the conductive n-channel. This results in increased induced charge within the inversion layer, which is proportional to (Vgs−Vt). For different values of VgsVgs, such as 1V, 1.5V, 2V, and 2.5V, the channel becomes wider and more conductive, enhancing the ability of current to flow across the channel as the gate voltage rises. With an applied drain-to-source voltage (Vds), the voltage distribution along the channel length causes a variation in channel potential, and the effective channel length is defined from the source to the drain. The gate-to-channel voltage at any point along the channel is given by Vgs−V(x), where V(x) is the local channel voltage. The enhanced conductivity and width of the channel for increasing gate voltages reinforce the direct control of current by adjusting the gate voltage above the threshold value.
+
+![Alt Text](Images/resistiveregion1.jpeg)
+![Alt Text](Images/resistiveregion2.jpeg)
+![Alt Text](Images/resistiveregion3.jpeg)
+![Alt Text](Images/resistiveregion4.jpeg)
+![Alt Text](Images/resistiveregion5.jpeg)
+![Alt Text](Images/resistiveregion6.jpeg)
+![Alt Text](Images/resistiveregion7.jpeg)
+![Alt Text](Images/resistiveregion8.jpeg)
+
+### <ins>**b)Drift Current Theory**</ins>
+
+		   Threshold voltage is defined as the gate-source voltage at which strong inversion occurs, usually denoted as Vt. When VgsVgs exceeds Vt, induced charge in the MOS channel becomes proportional to (Vgs−Vt), with the charge at any position xx along the channel described by Qi(x)∝−[(Vgs−V(x))−Vt]. The gate oxide capacitance, Cox, is given by ϵox/tox, where ϵox is the oxide permittivity and tox is the thickness of the oxide. For the bias values Vgs=1V, Vds=0.05V, and Vt=0.45V, two types of currents are considered: drift current, which is due to the potential difference, and diffusion current, which is caused by differences in carrier concentration. The drain current IdId is expressed as the product of charge carrier velocity and available charge distributed across the channel width.
+
+![Alt Text](Images/Idtheory1.jpeg)	
+![Alt Text](Images/Idtheory2.jpeg)	
+![Alt Text](Images/Idtheory3.jpeg)	
+![Alt Text](Images/Idtheory4.jpeg)	
+![Alt Text](Images/Idtheory5.jpeg)	
+
+### <ins>**c)Drain Current model for linear region of operation**</ins>
+
+        The drain current in an n-channel MOSFET, under the condition Vgs=1V, Vds=0.05V, and Vt=0.45V, is given by the expression Id=kn[(Vgs−Vt)Vds−Vds2/2], where kn=kn′(W/L)and represents the gain factor. In the linear or resistive region of operation, when Vds is much less than (Vgs−Vt), the quadratic term is negligible, making the drain current approximately linear in Vds. This relationship arises from integrating the charge and velocity expressions over the channel length, considering drift current due to potential difference. The full first-order analysis yields Id=μnCox(W/L)[(Vgs−Vt)Vds−Vds2/2], where μn is electron mobility and Cox is gate oxide capacitance. This equation describes how the drain current varies in the linear region for an NMOS device.
+
+![Alt Text](Images/Idlinear1.jpeg)
+![Alt Text](Images/Idlinear2.jpeg)
+![Alt Text](Images/Idlinear3.jpeg)
+
+### <ins>**d)Spice conclusion to resistive operation**</ins>
+
+           To calculate the drain current (I) for different gate-source voltages (Vgs), use the linear equation Id=kn⋅[(Vgs−Vt)Vds−Vds2/2]. For each value of VgsVgs, sweep the drain-source voltage (Vds) from zero up to (Vgs−Vt). For example, with Vgsvalues of 0.5 V, 1 V, 1.5 V, 2 V, and 2.5 V, compute (Vgs−Vt) as 0.05 V, 0.55 V, 1.05 V, 1.55 V, and 2.05 V, respectively, assuming Vt=0.45V. The drain-source voltage (Vds) can be swept from 0 up to 2.05 V depending on the gate overdrive. In the linear or resistive region of operation, the drain current equation simplifies, especially when the quadratic term is small, leading to a linear dependence on (Vgs−Vt)Vds for small Vds.
+
+![Alt Text](Images/resistiveoperation.jpeg)		
+
+### <ins>**e)Pinch off region condition**</ins>
+
+           Channel voltage is determined as Vgs−Vds at any point along the channel. For Vgs=1V, Vds is swept from 0.05V to 0.95V, and the gate-to-channel voltage at different points can be compared against the threshold voltage Vt=0.45V. When Vgs−Vds is greater than Vt, the channel is strongly inverted. When it equals Vt, the channel near the drain is at the threshold, marking the start of the pinch-off phenomenon. If Vgs−Vds falls below Vt, the channel disappears near the drain, indicating complete pinch-off. This transition defines the limits of the linear and saturation regions of MOSFET operation.
+
+![Alt Text](Images/pinchoff1.jpeg)
+![Alt Text](Images/pinchoff2.jpeg)
+![Alt Text](Images/pinchoff3.jpeg)
+
+### <ins>**f)Drain current model for Saturation region of operation**</ins>
+
+        The effective conductive channel length in a MOSFET is modulated by the applied drain-source voltage (Vds). As Vds increases, the depletion region at the drain end grows, shortening the effective channel length. Although the initial theory presents the current as ideally constant—a perfect current source—this isn't entirely accurate due to channel length modulation. The drain current (Id) should be described more precisely using the equation: Id=Kn′/2⋅W/L⋅(Vgs−Vt)^2 [1+λVds] , where λ represents the channel length modulation factor. This results in a drain current that varies linearly with Vds in the saturation region, rather than remaining constant. Such a modification accounts for the real behavior in MOSFET operation, addressing the non-idealities observed in practical devices
+
+![Alt Text](Images/saturationregion1.jpeg)
+![Alt Text](Images/saturationregion2.jpeg)
+![Alt Text](Images/saturationregion3.jpeg)
+![Alt Text](Images/saturationregion4.jpeg)
+![Alt Text](Images/saturationregion5.jpeg)
+![Alt Text](Images/saturationregion6.jpeg)
+![Alt Text](Images/saturationregion7.jpeg)
+
+### <ins>**Introduction to SPICE**</ins>
+
+### <ins>**a)Basic SPICE Setup**</ins>
+
+          To simulate MOSFET behavior using SPICE software, the parameters and equations describing device physics are incorporated into the model. The threshold voltage, given by Vt=Vto+γ(∣ ⁣−2Φf+Vsb∣−∣ ⁣−2Φf∣), depends on substrate bias and semiconductor properties. In the linear region, the drain current is expressed as Id=kn⋅[(Vgs−Vt)Vds−Vds22]. In the saturation region, the current is defined as Id=Kn′2⋅WL⋅(Vgs−Vt)2[1+λVds] to account for channel length modulation. SPICE software uses both these modeling equations and circuit netlist input to analyze and plot device response based on user-defined voltage and parameter sweeps. The core equations, bias voltages, and physical constants are crucial for accurate circuit simulation and characterization.
+		  
+![Alt Text](Images/spicesetup1.jpeg)
+![Alt Text](Images/spicesetup2.jpeg)
+![Alt Text](Images/spicesetup3.jpeg)
+![Alt Text](Images/spicesetup4.jpeg)
+
+### <ins>**b)Circuit Description in SPICE Syntax**</ins>
+
+          A SPICE netlist is a textual representation of an electronic circuit, specifying each component and its connections. The netlist contains lines where each line describes a circuit element, such as transistors, resistors, or voltage sources, with their respective nodes and values. For instance, a MOSFET is specified with its drain, gate, source, bulk, type, width, and length parameters. A resistor entry includes its two nodes and resistance value in ohms. A voltage source is defined by its two nodes and voltage magnitude, and the nodes connect corresponding terminals of the actual circuit components. This systematic format allows for easy mapping between the schematic and its netlist, translating physical nodes like drain, gate, source, substrate, or resistor terminals into text. The netlist uses concise labeling to represent the structure of the circuit, making it readable by both engineers and simulation software. Each entry links a component’s SPICE label and values to its position in the circuit.
+
+![Alt Text](Images/circuit1.jpeg)
+![Alt Text](Images/circuit2.jpeg)
+![Alt Text](Images/circuit3.jpeg)
+![Alt Text](Images/circuit4.jpeg)
+![Alt Text](Images/circuit5.jpeg)
+![Alt Text](Images/circuit6.jpeg)
+![Alt Text](Images/circuit7.jpeg)
+![Alt Text](Images/circuit8.jpeg)
+![Alt Text](Images/circuit9.jpeg)
+![Alt Text](Images/circuit10.jpeg)
+![Alt Text](Images/circuit11.jpeg)
+![Alt Text](Images/circuit12.jpeg)
+![Alt Text](Images/circuit13.jpeg)
+![Alt Text](Images/circuit14.jpeg)
+![Alt Text](Images/circuit15.jpeg)
+![Alt Text](Images/circuit16.jpeg)
+![Alt Text](Images/circuit17.jpeg)
+![Alt Text](Images/circuit18.jpeg)
+![Alt Text](Images/circuit19.jpeg)
+![Alt Text](Images/circuit20.jpeg)
+![Alt Text](Images/circuit21.jpeg)
+
+### <ins>**c)Technology file parameters**</ins>
+
+          A technology file in SPICE provides crucial device parameters and behavioral models for semiconductor simulation. It uses specific syntax and modeling entries to define NMOS and PMOS devices with variables such as threshold voltage, oxide thickness, and bias coefficients. Fundamental equations are included, detailing how threshold voltage dynamically changes based on substrate bias and material properties. Current equations for both linear and saturation regions are specified, capturing channel modulation effects and dependencies on gate and drain voltages. All relevant constants and formulas are packaged and referenced in the library for accurate device performance prediction within simulations, enabling realistic analysis of integrated circuit behavior.
+
+![Alt Text](Images/techfile1.jpeg)
+![Alt Text](Images/techfile2.jpeg)	  
+![Alt Text](Images/techfile3.jpeg)	  
+![Alt Text](Images/techfile4.jpeg)	
+
+### <ins>**d)First SPICE Simulations**</ins>
+
+         The technology file connects netlist device names like "nmos" to detailed transistor models using .MODEL statements, which describe key device parameters for simulation. Threshold voltage is modeled as Vt=Vto+γ(∣ ⁣−2Φf+Vsb∣−∣ ⁣−2Φf∣), where γ depends on process constants. Surface potential, Φf, is calculated from doping concentrations. For MOSFET operation, the linear region current is given by Id=kn[(Vgs−Vt)Vds−Vds^2/2], and the saturation region current by Id=Kn′/2WL(Vgs−Vt)^2[1+λVds], which includes channel-length modulation. These equations and model parameters are referenced as part of an external file, such as "xxxx_025um_model.mod," ensuring accurate device behavior during circuit simulation.
+
+![Alt Text](Images/firstspice1.jpeg)
+![Alt Text](Images/firstspice2.jpeg)	
+![Alt Text](Images/firstspice3.jpeg)	
+![Alt Text](Images/firstspice4.jpeg)	
+![Alt Text](Images/firstspice5.jpeg)	
+![Alt Text](Images/firstspice6.jpeg)	
+![Alt Text](Images/firstspice7.jpeg)	
+![Alt Text](Images/firstspice8.jpeg)	
+![Alt Text](Images/firstspice9.jpeg)	
+
+### <ins>**e)Spice Lab with Sky130 models**</ins>
+
+![Alt Text](Images/Sky130Lab1.jpeg)
+![Alt Text](Images/Sky130Lab2.jpeg)
+![Alt Text](Images/Sky130Lab3.jpeg)
+
+</details>
