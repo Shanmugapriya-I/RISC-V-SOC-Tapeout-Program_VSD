@@ -2107,16 +2107,16 @@ The technology file connects netlist device names like "nmos" to detailed transi
 ![Alt Text](Images/firstspice3.jpeg)	
 ![Alt Text](Images/firstspice4.jpeg)	
 ![Alt Text](Images/firstspice5.jpeg)	
-![Alt Text](Images/firstspice6.jpeg)	
-![Alt Text](Images/firstspice7.jpeg)	
-![Alt Text](Images/firstspice8.jpeg)	
-![Alt Text](Images/firstspice9.jpeg)	
+![Alt Text](Images/firstspice6.png)	
+![Alt Text](Images/firstspice7.png)	
+![Alt Text](Images/firstspice8.png)	
+![Alt Text](Images/firstspice9.png)	
 
 ### <ins>**e)Spice Lab with Sky130 models**</ins>
 
-![Alt Text](Images/Sky130Lab1.jpeg)
-![Alt Text](Images/Sky130Lab2.jpeg)
-![Alt Text](Images/Sky130Lab3.jpeg)
+![Alt Text](Images/Sky130Lab1.png)
+![Alt Text](Images/Sky130Lab2.png)
+![Alt Text](Images/Sky130Lab3.png)
 
 </details>
 
