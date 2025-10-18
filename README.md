@@ -1132,8 +1132,6 @@ endmodule
 <details>
   <summary>Week 2 </summary>
 
-# Week 2 - BabySoc Fundamentals and Functional Modelling
-
  <details>
   <summary> Theory </summary>
 
