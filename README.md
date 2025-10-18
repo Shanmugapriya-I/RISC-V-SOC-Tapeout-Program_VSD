@@ -2133,20 +2133,20 @@ Velocity saturation effect alters the drain current characteristics in MOSFETs d
 
 ![Alt Text](Images/lowernodes1.jpeg)
 ![Alt Text](Images/lowernodes2.jpeg)
-![Alt Text](Images/lowernodes3.jpeg)
-![Alt Text](Images/lowernodes4.jpeg)
-![Alt Text](Images/lowernodes5.jpeg)
-![Alt Text](Images/lowernodes6.jpeg)
-![Alt Text](Images/lowernodes7.jpeg)
+![Alt Text](Images/lowernodes3.png)
+![Alt Text](Images/lowernodes4.png)
+![Alt Text](Images/lowernodes5.png)
+![Alt Text](Images/lowernodes6.png)
+![Alt Text](Images/lowernodes7.png)
 
 ### <ins>**b)Drain Current vs Gate voltage for long and short channel device**</ins>
 
 The drain current behavior in MOSFETs varies depending on the dimensions of the channel. For a larger device with W=1.8µm and L=1.2µm, the current exhibits a pronounced quadratic dependence on the control voltage, resulting in a sharply rising curve as voltage increases. In contrast, a smaller device with W=0.375µm and L=0.25µm shows a more gradual, almost linear increase in current. This is due to carrier velocity saturation, which is more significant for shorter channels and effectively limits the current rise. As a result, the saturation current in scaled-down devices doesn't increase as rapidly, and the overall current capability is reduced when compared to longer-channel devices. This difference emphasizes the importance of velocity saturation in deep submicron CMOS technology.
 
 ![Alt Text](Images/longandshort1.jpeg)
-![Alt Text](Images/longandshort2.jpeg)
-![Alt Text](Images/longandshort3.jpeg)
-![Alt Text](Images/longandshort4.jpeg)
+![Alt Text](Images/longandshort2.png)
+![Alt Text](Images/longandshort3.png)
+![Alt Text](Images/longandshort4.png)
 
 ### <ins>**c)Velocity Saturation at higher and lower electric fields**</ins>
 
@@ -2175,9 +2175,9 @@ Id=kn⋅(Vgt⋅Vmin−Vmin^2/2)⋅(1+λVds) , where Vmin is the minimum of Vgt, 
 
 ### <ins>**e)Sky130 Id - Vgs**</ins>
 
-![Alt Text](Images/Sky130IdVgs1.jpeg)
-![Alt Text](Images/Sky130IdVgs2.jpeg)
-![Alt Text](Images/Sky130IdVgs3.jpeg)
+![Alt Text](Images/Sky130IdVgs1.png)
+![Alt Text](Images/Sky130IdVgs2.png)
+![Alt Text](Images/Sky130IdVgs3.png)
 
 ### <ins>**CMOS Voltage transfer characteristics**</ins>
 
