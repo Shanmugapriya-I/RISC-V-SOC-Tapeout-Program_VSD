@@ -2093,7 +2093,7 @@ A SPICE netlist is a textual representation of an electronic circuit, specifying
 
 ### <ins>**c)Technology file parameters**</ins>
 
-          A technology file in SPICE provides crucial device parameters and behavioral models for semiconductor simulation. It uses specific syntax and modeling entries to define NMOS and PMOS devices with variables such as threshold voltage, oxide thickness, and bias coefficients. Fundamental equations are included, detailing how threshold voltage dynamically changes based on substrate bias and material properties. Current equations for both linear and saturation regions are specified, capturing channel modulation effects and dependencies on gate and drain voltages. All relevant constants and formulas are packaged and referenced in the library for accurate device performance prediction within simulations, enabling realistic analysis of integrated circuit behavior.
+A technology file in SPICE provides crucial device parameters and behavioral models for semiconductor simulation. It uses specific syntax and modeling entries to define NMOS and PMOS devices with variables such as threshold voltage, oxide thickness, and bias coefficients. Fundamental equations are included, detailing how threshold voltage dynamically changes based on substrate bias and material properties. Current equations for both linear and saturation regions are specified, capturing channel modulation effects and dependencies on gate and drain voltages. All relevant constants and formulas are packaged and referenced in the library for accurate device performance prediction within simulations, enabling realistic analysis of integrated circuit behavior.
 
 ![Alt Text](Images/techfile1.jpeg)
 ![Alt Text](Images/techfile2.jpeg)	  
