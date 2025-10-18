@@ -2119,3 +2119,80 @@ The technology file connects netlist device names like "nmos" to detailed transi
 ![Alt Text](Images/Sky130Lab3.jpeg)
 
 </details>
+
+<details>
+  <summary>Day 2 </summary>
+
+## **Day 2 - Verilog Saturation and Basics of CMOS Inverter VTC**
+
+### <ins>**SPICE Simulation for lower nodes and velocity saturation effect**</ins> 
+
+### <ins>**a)Spice Simulation for lower nodes**</ins> 
+
+Velocity saturation effect alters the drain current characteristics in MOSFETs depending on the channel length and width. For a device with larger dimensions, the current exhibits quadratic dependence on gate voltage, consistent with the classical saturation region equation. When device dimensions shrink, the current shows a nearly linear dependence, deviating from the quadratic behavior due to velocity saturation of charge carriers. This distinction becomes prominent as channel length is reduced, resulting in a reduced slope and lower current levels compared to longer-channel devices. The linear response is attributed to carriers reaching their saturation velocity quickly, limiting further current increase. These effects must be considered during modeling and design, especially for deep submicron technologies.
+
+![Alt Text](Images/lowernodes1.jpeg)
+![Alt Text](Images/lowernodes2.jpeg)
+![Alt Text](Images/lowernodes3.jpeg)
+![Alt Text](Images/lowernodes4.jpeg)
+![Alt Text](Images/lowernodes5.jpeg)
+![Alt Text](Images/lowernodes6.jpeg)
+![Alt Text](Images/lowernodes7.jpeg)
+
+### <ins>**b)Drain Current vs Gate voltage for long and short channel device**</ins>
+
+The drain current behavior in MOSFETs varies depending on the dimensions of the channel. For a larger device with W=1.8µm and L=1.2µm, the current exhibits a pronounced quadratic dependence on the control voltage, resulting in a sharply rising curve as voltage increases. In contrast, a smaller device with W=0.375µm and L=0.25µm shows a more gradual, almost linear increase in current. This is due to carrier velocity saturation, which is more significant for shorter channels and effectively limits the current rise. As a result, the saturation current in scaled-down devices doesn't increase as rapidly, and the overall current capability is reduced when compared to longer-channel devices. This difference emphasizes the importance of velocity saturation in deep submicron CMOS technology.
+
+![Alt Text](Images/longandshort1.jpeg)
+![Alt Text](Images/longandshort2.jpeg)
+![Alt Text](Images/longandshort3.jpeg)
+![Alt Text](Images/longandshort4.jpeg)
+
+### <ins>**c)Velocity Saturation at higher and lower electric fields**</ins>
+
+When the electric field applied to a semiconductor is low, carrier velocity increases linearly with the field due to proportional mobility. As the electric field strength rises beyond a certain critical value, carrier velocity reaches a maximum known as saturation velocity, remaining constant even if field intensity increases further. This saturation occurs because of increased scattering effects, which limit how fast charge carriers can move. The mathematical model expresses this behavior through a velocity equation that transitions from linear to constant at the critical field, with continuity set at the critical field point. The critical electric field is defined as twice the saturation velocity divided by mobility, ensuring consistent modeling for simulation purposes.
+
+![Alt Text](Images/electricfield1.jpeg)
+![Alt Text](Images/electricfield2.jpeg)
+![Alt Text](Images/electricfield3.jpeg)
+![Alt Text](Images/electricfield4.jpeg)
+![Alt Text](Images/electricfield5.jpeg)
+![Alt Text](Images/electricfield6.jpeg)
+![Alt Text](Images/electricfield7.jpeg)
+![Alt Text](Images/electricfield8.jpeg)
+
+### <ins>**d)Velocity saturation drain current model**</ins>
+
+A comprehensive current model for MOSFETs combines multiple effects for realistic device behavior. When operating with Vgt=Vgs−Vt, the device shows cutoff mode with zero current for Vgt<0. For all other modes, a unified model applies:
+Id=kn⋅(Vgt⋅Vmin−Vmin^2/2)⋅(1+λVds) , where Vmin is the minimum of Vgt, Vds, and a technology-specific saturation voltage Vdsat. This model integrates resistive, velocity saturation, and saturation behaviors to accurately predict current across channel lengths. It accounts for velocity saturation by limiting voltage-dependent carrier velocity, thus modeling the early saturation in short-channel devices. The saturation voltage Vdsat is a key technology parameter representing the voltage where velocity saturates and is independent of gate or drain voltages. This approach ensures continuity and accuracy for MOSFET current prediction in modern CMOS technologies.
+
+![Alt Text](Images/currentmodel1.jpeg)
+![Alt Text](Images/currentmodel2.jpeg)
+![Alt Text](Images/currentmodel3.jpeg)
+![Alt Text](Images/currentmodel4.jpeg)
+![Alt Text](Images/currentmodel5.jpeg)
+![Alt Text](Images/currentmodel6.jpeg)
+
+### <ins>**e)Sky130 Id - Vgs**</ins>
+
+![Alt Text](Images/Sky130IdVgs1.jpeg)
+![Alt Text](Images/Sky130IdVgs2.jpeg)
+![Alt Text](Images/Sky130IdVgs3.jpeg)
+
+### <ins>**CMOS Voltage transfer characteristics**</ins>
+
+### <ins>**a)MOSFET as switch**</ins
+
+A CMOS inverter consists of a PMOS and NMOS transistor connected in series between supply voltage (Vdd) and ground (Vss), with their gates driven by the input signal. When the input voltage is high and equal to Vdd, the PMOS transistor is turned off while the NMOS transistor is turned on, causing the output node to discharge toward Vss through the on-resistance of the NMOS. The load capacitance (CL) discharges via the conducting NMOS, and the output voltage drops. MOS transistors act as voltage-controlled switches: they show infinite off-resistance when the gate-source voltage (∣Vgs∣) is less than the threshold voltage (∣Vt∣), and finite on-resistance when ∣Vgs∣ exceeds ∣Vt∣. This switching characteristic enables digital logic operation, with precise control over output transitions in response to input changes.	
+
+![Alt Text](Images/mosfetswitch1.jpeg)
+![Alt Text](Images/mosfetswitch2.jpeg)
+
+
+### <ins>**b)Introduction to standard MOS voltage current parameters**</ins
+
+The voltages and currents in a CMOS inverter are defined as follows: each MOSFET has gate (G), source (S), and drain (D) terminals. The gate-source voltage (Vgs) controls device operation, while the drain-source voltage (Vds) is crucial for current flow. The PMOS has VgsP and VdsP, and the NMOS has VgsN and VdsN. During logic transitions, the NMOS can discharge the load capacitance (CL), sourcing drain-to-source current (IdsN), while the PMOS can recharge it via its drain-to-source current (IdsP). When Vin=Vdd, a current path exists from the output to the ground, resulting in Vout=0; when Vin=0, the current path is from the supply to the output, setting Vout=Vdd. These relationships define the switching behavior and output logic levels in CMOS digital circuits.
+
+![Alt Text](Images/mosvoltagecurrent1.jpeg)
+![Alt Text](Images/mosvoltagecurrent2.jpeg)
+
