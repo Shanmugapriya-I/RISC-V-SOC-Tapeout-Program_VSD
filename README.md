@@ -2364,6 +2364,8 @@ Static behavior evaluation of a CMOS inverter is centered on assessing its robus
 ![Alt Text](Images/nmlab2.png)
 ![Alt Text](Images/nmlab3.png)
 
+</details>
+
 <details>
        <summary>Day 5 </summary>
 
