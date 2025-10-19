@@ -2196,3 +2196,244 @@ The voltages and currents in a CMOS inverter are defined as follows: each MOSFET
 ![Alt Text](Images/mosvoltagecurrent1.jpeg)
 ![Alt Text](Images/mosvoltagecurrent2.jpeg)
 
+### <ins>**c)PMOS / NMOS Drain current vs Drain voltage**</ins>
+
+A CMOS inverter consists of a PMOS and NMOS transistor with shared gate and drain terminals, where input voltage Vin is applied to both gates and output voltage Vout is taken from the drains. The NMOS gate-source voltage VgsN is Vin-Vss, and its drain-source voltage VdsN is Vout. The PMOS gate-source voltage VgsP is Vin-Vdd, and its drain-source voltage VdsP is Vout-Vdd. The current through the PMOS (IdsP) is the negative of the NMOS current (IdsN). NMOS and PMOS devices have their respective Id vs Vd characteristic curves plotted, showing how the drain current varies with drain-source voltage for different gate-source voltages. The PMOS plot is mirrored due to the negative voltages used in convention, and both device types' current equations and curve families are key for CMOS inverter operation analysis.
+
+![Alt Text](Images/IdvsVd.jpeg)
+
+### <ins>**d)Step 1:Convert PMOS gate-source voltage to Vin**</ins>
+
+The gate-source and drain-source voltages for NMOS and PMOS transistors are determined by the input and output voltages, where the NMOS gate-source voltage is Vin minus Vss and drain-source voltage is Vout, and the PMOS gate-source voltage is Vin minus Vdd and drain-source voltage is Vout minus Vdd. The PMOS drain current is the negative of the NMOS drain current. For a supply voltage of 2V, different Vgsp values are matched with corresponding Vin values, ranging from 0V to 2V in steps of 0.5V. NMOS Idsn vs Vdsn and PMOS Idsp vs Vdsp characteristics show how drain current varies for different voltages. Curves shift as Vin changes, illustrating the switching behavior and current flow dependence on gate-source voltage for both devices.
+
+![Alt Text](Images/s1.jpeg)
+
+### <ins>**e)Step 2 and 3:Convert PMOS and NMOS drain-source voltage to Vout**</ins>
+
+The load curves for NMOS and PMOS transistors are plotted based on different input voltages, showing how the drain current Idsn varies with output voltage Vout for various values of Vin. For the NMOS transistor, as Vin increases from 0 to 2V, the load line rises, indicating increased current capability. In contrast, the PMOS transistor load curve starts from Vin = 0 and shifts downward as Vin increases, aligning with the complementary behavior in CMOS inverter operation. The construction of these load curves uses the transfer characteristics equations and relationships for gate-source and drain-source voltages, illustrating the switching transitions that define reliable inverter performance.
+
+![Alt Text](Images/s21.jpeg)
+![Alt Text](Images/s22.jpeg)
+![Alt Text](Images/s23.jpeg)
+
+### <ins>**f)Step 4:Merge PMOS-NMOS Load curves and plot VTC**</ins>
+
+Vin and Vout are the shared variables for both PMOS and NMOS transistors, and their intersection points on the respective load curves determine the output behavior of the inverter. Depending on the value of Vin, Vout varies between 2V and 0V, mapping the transition from the PMOS 'linear' and NMOS 'off' regions to both transistors in saturation, and finally to PMOS 'off' and NMOS 'linear.' The graphical intersection of corresponding load lines is used to pick up actual Vin points for each Vout. The resulting transfer characteristic curve illustrates the inverter's switching performance, marking changes in transistor conduction states and the logic threshold. This approach visualizes how CMOS inverter transitions occur as input voltage changes.
+
+![Alt Text](Images/s4.jpeg)
+
+</details>
+
+<details>
+  <summary>Day 3 </summary>
+	
+## **Day 3 - CMOS Switching threshold and dynamic simulations**
+
+### <ins>**Voltage transfer characteristics - SPICE simulation**</ins>
+
+### <ins>**a)Spice deck creation for CMOS inverter**</ins>
+
+A SPICE deck defines the circuit for simulation, including component connectivity, component values, and identification and naming of nodes. In this example, the circuit includes two transistors, M1 and M2, with specific width/length ratios indicated. The input voltage Vin and supply voltage Vdd are both 2.5V, and the circuit includes a load capacitor named cload with a value of 10fF. Nodes such as Vin, out, Vdd, and Vss are labeled for clarity. Properly naming and defining these nodes and elements is essential for accurate circuit simulation and analysis.
+
+
+![Alt Text](Images/spicedeck.jpeg)
+
+### <ins>**b)Spice simualation for CMOS inverter**</ins>
+
+![Alt Text](Images/inv1.png)
+![Alt Text](Images/inv2.png)
+![Alt Text](Images/inv3.png)
+![Alt Text](Images/inv4.png)
+![Alt Text](Images/inv5.png)
+![Alt Text](Images/inv6.png)
+
+
+### <ins>**c)Sky130 SPICE Simulation for CMOS**</ins>
+
+![Alt Text](Images/vtc1.png)
+![Alt Text](Images/vtc2.png)
+![Alt Text](Images/vtc3.png)
+![Alt Text](Images/trans1.png)
+![Alt Text](Images/trans2.png)
+![Alt Text](Images/trans3.png)
+
+
+### <ins>**Static behavior evaluation-CMOS Inverter robustness-Switching Threshold**</ins>
+
+### <ins>**a)Switching Threshold,Vm**</ins>
+
+The switching threshold Vm of a CMOS inverter is identified as the input voltage where Vin equals Vout, and it acts as the critical point determining logic state transitions. Vm is influenced by the width-to-length ratios (W/L) of the NMOS and PMOS transistors. For devices with equal W/L ratios, Vm is around 0.98V, while a larger PMOS W/L (relative to NMOS) shifts Vm to about 1.2V, which strengthens inverter noise margins and robustness. The SPICE simulation waveforms and static Vout-Vin curves define inverter performance, showing that the crossing point of Vin and Vout curves reveals Vm and the stability of the digital switching behavior. Idsp is always the negative of Idsn due to the complementary nature of the devices.
+
+![Alt Text](Images/st1.jpeg)
+![Alt Text](Images/st2.jpeg)
+![Alt Text](Images/st3.jpeg)
+
+### <ins>**b)Analytical expression of Vm as the function of (W/L)p and (W/L)n**</ins>
+
+The switching threshold, Vm, in a CMOS inverter is evaluated for robustness by analyzing when the current through the PMOS equals the negative of the NMOS current, resulting in the equation Idsp + Idsn = 0. The threshold occurs at the point where Vin equals Vout. Using the device parameters and width-to-length ratios, Vm can be calculated for the given SPICE waveforms and typically results in Vm values of about 0.98V and 1.2V, depending on transistor sizing. The saturation current for each device incorporates terms like the overdrive voltage, channel-length modulation, and the fitting parameter λ, though channel-length modulation can be neglected for this calculation. The normalized ratio R, involving W/L and mobility coefficients, is used to simplify Vm’s expression and reveal its dependence on device design parameters. This static evaluation helps determine the inverter’s robustness against process variations and is fundamental for digital circuit reliability.
+
+![Alt Text](Images/vm1.jpeg)
+![Alt Text](Images/vm2.jpeg)
+![Alt Text](Images/vm3.jpeg)
+![Alt Text](Images/vm4.jpeg)
+
+### <ins>**c)Analytical expression of (W/L)p and (W/L)n as a function of Vm**</ins>
+
+The evaluation of the CMOS inverter's static behavior focuses on determining the switching threshold, Vm, by equating the drain current of the PMOS and NMOS transistors. The main equation involves balancing kp times the PMOS saturation terms and kn times the NMOS saturation terms, incorporating the overdrive voltages and saturation voltages of both transistors. An alternative formulation gives the required PMOS to NMOS size ratio for a desired Vm, expressing it in terms of key process parameters and threshold voltages. This threshold analysis demonstrates robust inverter operation by relating transistor sizing and threshold settings to switching point accuracy, with Vm values typically around 0.98V and 1.2V for the CMOS process parameters used. The switching threshold occurs where Vin equals Vout, which is a key robustness criterion for inverter design.
+
+![Alt Text](Images/vm5.jpeg)
+![Alt Text](Images/vm6.jpeg)
+![Alt Text](Images/vm7.jpeg)
+![Alt Text](Images/vm8.jpeg)
+![Alt Text](Images/vm9.jpeg)
+![Alt Text](Images/vm10.jpeg)
+
+### <ins>**d)Static and Dynamic simualation of CMOS inverter with increases PMOS width**</ins>
+
+The model description and netlist define two MOS transistors, a PMOS and NMOS, both with specified width and length parameters, along with a load capacitor value and supply voltage settings. The input signal Vin is defined as a pulse with parameters to generate transitions from 0 to 2.5 volts, and timing parameters set in picoseconds and nanoseconds. The simulation commands include transient analysis, operating point calculation, and library/model inclusions required by the CMOS circuit. The waveform is described to start at 0 volts, rise to 2.5 volts in 10 picoseconds, remain at that value for another 10 picoseconds, and return to 0 volts after 2 nanoseconds. This setup enables detailed SPICE simulations of transient and steady-state behavior for CMOS inverter robustness evaluation.
+
+![Alt Text](Images/sd1.jpeg)
+![Alt Text](Images/sd2.jpeg)
+![Alt Text](Images/sd3.jpeg)
+![Alt Text](Images/sd4.jpeg)
+![Alt Text](Images/sd5.jpeg)
+
+### <ins>**e)Applications of CMOS inverter in clock network and STA**</ins>
+
+
+The evaluation of CMOS inverter robustness focuses on the switching threshold, Vm, which is defined as the point where input voltage equals output voltage. SPICE waveform results illustrate rise and fall delays for different transistor width-to-length ratios, showing that when the PMOS width is twice the NMOS width, the rise and fall delays become nearly equal, a characteristic ideal for clock inverters or buffers. Device physics highlight that PMOS on-resistance is approximately 2.5 times higher than that of NMOS, directly affecting signal transition times. Typical design choices use equal rise and fall edge delays to ensure reliable clock distribution and minimize skew in H-tree clock networks. Buffer design and layout impacts parameters like pulse width, duty cycle, latency, power, and signal integrity. In timing analysis, slack must be positive or zero, calculated as the difference between data required and arrival times, factoring in clock period, setup time, and uncertainties. Ensuring appropriate delays and signal matching across the clock tree directly supports robust synchronization and minimizes timing errors within digital systems.
+
+![Alt Text](Images/app1.jpeg)
+![Alt Text](Images/app2.jpeg)
+![Alt Text](Images/app3.jpeg)
+![Alt Text](Images/app4.jpeg)
+![Alt Text](Images/app5.jpeg)
+
+</details>
+
+<details>
+       <summary>Day 4 </summary>
+
+## **Day 4 - CMOS Noise Margin robustness evaluation**
+
+### <ins>**Static behavior evaluation - CMOS inverter robustness - Noise Margin**</ins>
+
+### <ins>**a)Introduction to Noise Margin**</ins>
+
+A NOT gate is characterized by a voltage transfer curve, where the output voltage changes sharply from high (Vdd) to low (0) as the input voltage crosses a threshold, typically around Vdd/2. The ideal inverter demonstrates an infinite slope at this threshold point, producing a distinct switch between logic levels. Real inverters, however, exhibit a finite slope, which results in noise margins and clear boundaries for logic transitions. The output low voltage (VOL) defines the maximum value treated as logic '0', while output high voltage (VOH) is the minimum voltage considered logic '1'. Similarly, the input low voltage (VIL) is the highest input recognized as logic '0', and input high voltage (VIH) is the lowest input accepted as logic '1'. Voltages between VIL and VIH constitute the undefined region. The logic threshold ensures stable digital behavior and immunity to small analog fluctuations in the input voltage.
+
+![Alt Text](Images/intronm1.jpeg)
+![Alt Text](Images/intronm2.jpeg)
+![Alt Text](Images/intronm3.jpeg)
+![Alt Text](Images/intronm4.jpeg)
+
+### <ins>**b)Noise Margin Parameters**</ins>
+
+
+The actual input-output characteristic of an inverter displays a transition from the output high voltage (VOH) to output low voltage (VOL) as the input voltage (Vin) increases. This curve is not perfectly abrupt, showing a finite slope around the threshold region, specifically where the slope equals −1. The regions of VIL (input low voltage) and VIH (input high voltage) are defined such that voltages below VIL are treated as logical '0' and those above VIH as logical '1'. Between these two voltages, the output changes gradually due to the finite slope, providing noise margins for signal integrity. The ideal inverter is represented by a sharp, almost vertical transition, whereas the practical curve demonstrates rounding and a less steep slope in the switching region. These characteristics are essential for reliable digital logic operation in real-world circuits.
+
+![Alt Text](Images/parameternm.jpeg)
+
+### <ins>**c)Noise Margin equation and summary**</ins>
+
+The concept of noise margin is crucial in digital logic design to ensure reliable operation of logic gates. Noise margins are categorized into noise margin high and noise margin low, which define the allowable voltage ranges that can still be correctly interpreted as logic '1' and logic '0', respectively. The boundary voltages involved are VOH (output high), VOL (output low), VIH (input high threshold), and VIL (input low threshold). The noise margin high (NMH) is calculated as VOH minus VIH, while the noise margin low (NML) is determined by VIL minus VOL. Any signal voltage within the noise margin regions will be accurately detected as the corresponding logic level, enhancing immunity to noise and voltage variations. If a signal falls within the undefined region, between VIL and VIH, its logic level cannot be guaranteed and may result in unpredictable circuit behavior. For signals to be robustly interpreted by digital circuits, they must remain within the respective noise margin high or noise margin low ranges. The transfer characteristics of an inverter typically show steep transitions and defined slopes, reflecting this clear separation of logical states. High noise margin values improve circuit reliability against voltage disturbances and external interferences.
+
+![Alt Text](Images/eq1.jpeg)
+![Alt Text](Images/eq2.jpeg)
+![Alt Text](Images/eq3.jpeg)
+![Alt Text](Images/eq4.jpeg)
+![Alt Text](Images/eq5.jpeg)
+
+
+### <ins>**d)Noise Margin variation with respect to PMOS width**</ins>
+
+Static behavior evaluation of a CMOS inverter is centered on assessing its robustness through noise margins, specifically NM_H and NM_L. Varying the width-to-length ratio (Wp/Lp) for PMOS and scaling the NMOS width (n times Wn/Ln), key data is collected for each configuration. As the NMOS width increases relative to the PMOS, the transition voltage (Vm) shifts higher, and the noise margins adjust accordingly. Initially, both NM_H and NM_L are 0.3 when Wp/Lp matches Wn/Ln, but NM_H improves significantly with higher NMOS scaling, peaking at 0.42 for ratios of 4Wn/Ln and 5Wn/Ln. Meanwhile, NM_L stabilizes or slightly decreases to 0.27 at the highest ratios. The inverter’s switching characteristic curve reveals that the voltage transfer characteristic sharpens, and the analog region broadens as NMOS width increases, marking a transition in design focus from digital robustness to aspects more relevant in analog design. Optimal robustness is reflected at intermediate ratios, balancing noise margin and threshold voltage for reliable operation in digital logic.
+
+![Alt Text](Images/nmw1.jpeg)
+![Alt Text](Images/nmw2.jpeg)
+![Alt Text](Images/nmw3.jpeg)
+![Alt Text](Images/nmw4.jpeg)
+![Alt Text](Images/nmw5.jpeg)
+![Alt Text](Images/nmw6.jpeg)
+![Alt Text](Images/nmw7.jpeg)
+![Alt Text](Images/nmw8.jpeg)
+
+### <ins>**e)Sky130 Noise Margin Labs**</ins>
+
+![Alt Text](Images/nmlab1.png)
+![Alt Text](Images/nmlab2.png)
+![Alt Text](Images/nmlab3.png)
+
+<details>
+       <summary>Day 5 </summary>
+
+## **Day 5 - CMOS power supply and device variation robustness evaluation**
+
+### <ins>**Static behavior evaluation - CMOS inverter robustness - Power supply variation**</ins>
+
+### <ins>**a)Smart SPICE simulation for power supply variation**</ins>
+
+Power supply scaling in CMOS inverter design is evaluated using SPICE simulations, where Vdd is reduced from 2.5V to 1V. For both supply voltages, the PMOS width is set to 0.9375 microns and the NMOS width to 0.375 microns. The voltage transfer characteristic illustrates how the inverter transitions between logic states as input voltage changes. At higher supply, output swings between near 2.5V and 0V, while for Vdd = 1V, the swing is correspondingly reduced. Various regions—PMOS linear/off, NMOS off/linear, and both transistors in saturation—are marked on the transfer curve, mapping how these device operating states shift with the supply voltage. Scaling down Vdd narrows the available noise margin and lowers the output range, impacting robustness and signal integrity in digital circuits. Careful consideration is required to maintain desired performance and reliability in low-voltage designs.
+
+![Alt Text](Images/smartspice.jpeg)
+![Alt Text](Images/smartspice1.png)
+![Alt Text](Images/smartspice2.png)
+![Alt Text](Images/smartspice3.png)
+
+### <ins>**b)Advantages and Disadvantages using low supply voltage**</ins>
+
+SPICE simulation of CMOS inverter performance under power supply scaling demonstrates how reducing supply voltage influences inverter characteristics. When the supply voltage is lowered to 0.5V, the inverter gain increases by almost 50%, resulting in sharper switching with less noise. The energy consumed per switching event is significantly reduced, as calculated by the formula ½CV², leading to a nearly 90% decrease in dynamic energy consumption. However, this reduction in supply voltage also affects performance, introducing an increase in propagation delay—rise delay increases to 220 ps while fall delay is 165 ps, compared to much lower values at higher supply voltages. As gain improves from 7.38 to 11.53 with reduced Vdd, energy efficiency is greatly enhanced, but designers must address the associated delay penalties to maintain robust circuit operation. Overall, lower supply voltages offer highly efficient designs, but with trade-offs in speed and performance.
+
+![Alt Text](Images/ad1.jpeg)
+![Alt Text](Images/ad2.jpeg)
+![Alt Text](Images/ad3.jpeg)
+![Alt Text](Images/ad4.jpeg)
+![Alt Text](Images/ad5.jpeg)
+![Alt Text](Images/ad6.jpeg)
+![Alt Text](Images/ad7.jpeg)
+
+### <ins>**c)Sky130 Supply Variation Labs**</ins>
+
+![Alt Text](Images/sv1.png)
+![Alt Text](Images/sv2.png)
+![Alt Text](Images/sv3.png)
+
+### <ins>**Static behavior evaluation - CMOS inverter robustness - Device variation**</ins>
+
+### <ins>**a)Sources of variation - Etching process**</ins>
+
+The inverter chain structure at the layout and circuit level is highlighted by repeating arrangements of PMOS and NMOS transistors, sharing well-defined poly gates and active diffusion regions across each inverter stage. Power rails Vdd and Vss run parallel to the chain, supplying each stage with a regular connection pattern. In single inverters, the poly gate extends vertically, connecting source and drain regions in both PMOS and NMOS devices, while layout variables width (W) and length (L) directly influence device properties. Mask perspectives show the ideal gate shape, but actual semiconductor fabrication introduces edge roughness and variations, resulting in deviations from the perfect mask. These edge irregularities affect the effective channel dimensions, impacting drain current as described by the equation Id=μCoxWL[(Vgs−Vt)Vds−Vds^2/2]. In chains, inverters in the middle maintain a consistent structure on both sides, ensuring propagation of signal integrity between delay elements or flip-flops at either end.
+
+
+![Alt Text](Images/etch1.jpeg)
+![Alt Text](Images/etch2.jpeg)
+![Alt Text](Images/etch3.jpeg)
+![Alt Text](Images/etch4.jpeg)
+![Alt Text](Images/etch5.jpeg)
+
+
+### <ins>**b)Sources of variation - Oxide Thickness**</ins>
+
+An inverter chain illustrates the cascading connection of multiple CMOS inverters, where each stage processes the signal and passes it along. The ideal oxidation process in MOSFET fabrication is targeted to yield a uniform gate oxide thickness (tox), but in practice, deviations occur, leading to irregularities in the actual gate oxide layer. These imperfections affect the gate capacitance and, consequently, the electrical characteristics of the transistor. The drain current relationship incorporates these factors, specifically showing that current Id depends on the ratio of oxide permittivity to thickness (ϵox/tox), the width-to-length ratio (W/L), and the applied gate and drain voltages. Device reliability, gain, and switching properties are thus sensitive to variations introduced during fabrication processes that impact the oxide layer integrity.
+
+![Alt Text](Images/ot1.jpeg)
+![Alt Text](Images/ot2.jpeg)
+![Alt Text](Images/ot3.jpeg)
+![Alt Text](Images/ot4.jpeg)
+![Alt Text](Images/ot5.jpeg)
+
+### <ins>**c)Smart Spice simulation for Device variation**</ins>
+
+A comparison is shown between strong PMOS–weak NMOS and weak PMOS–strong NMOS configurations by varying the Wp and Wn values. In the first scenario, the PMOS transistor width is much larger than the NMOS, favoring a stronger pull-up, while in the opposite scenario, the NMOS is wider and dominates the switching. As the strengths of PMOS and NMOS devices are interchanged, the switching threshold (Vm) of the inverter shifts, affecting noise margins and the voltage transfer characteristic. The transfer graph indicates how the regions where PMOS and NMOS operate in linear or saturation modes change accordingly, directly impacting output voltage swing and robustness. Balancing the device strengths plays a crucial role in tuning inverter performance for optimal noise margin and correct logic threshold. These variations highlight the importance of device sizing in practical CMOS design for reliable circuit operation.
+
+![Alt Text](Images/dv.jpeg)
+
+### <ins>**d)Sky130 Device Variation Labs**</ins>
+
+
+![Alt Text](Images/dvlab1.png)
+![Alt Text](Images/dvlab2.png)
+![Alt Text](Images/dvlab3.png)
+
+</details>
+</details>
