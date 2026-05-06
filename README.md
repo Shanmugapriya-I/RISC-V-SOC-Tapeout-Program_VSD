@@ -3236,10 +3236,10 @@ As expected: slow + low voltage = maximum delay.
 
 Fast + low temperature = shortest delays.
 
-</details>
-
 Perform multi-corner STA (TT, SS, FF) for the RISC-V core to evaluate timing robustness across Process-Voltage-Temperature variations.
 You analyze worst-case slack, path failures, and verify timing closure for tapeout readiness.
+
+</details>
 
 ### **Acknowledgment**
 I am thankful to [**Kunal Ghosh**](https://github.com/kunalg123) and Team **[VLSI System Design (VSD)](https://vsdiat.vlsisystemdesign.com/)** for the opportunity to participate in the ongoing **RISC-V SoC Tapeout Program**.  
