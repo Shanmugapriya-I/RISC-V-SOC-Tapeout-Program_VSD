@@ -2442,3 +2442,806 @@ A comparison is shown between strong PMOS–weak NMOS and weak PMOS–strong NMO
 
 <details>
   <summary>Week 5 </summary>
+
+### <ins>**OpenROAD installation guide**</ins>
+
+OpenROAD is an open-source, fully automated RTL-to-GDSII flow for digital integrated circuit (IC) design. It supports synthesis, floorplanning, placement, clock tree synthesis, routing, and final layout generation. OpenROAD enables rapid design iterations, making it ideal for academic research and industry prototyping.
+
+### <ins>**Steps to Install OpenROAD and Run GUI**</ins>
+
+### <ins>**1. Clone the OpenROAD Repository**</ins>
+
+```bash
+git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD-flow-scripts
+cd OpenROAD-flow-scripts
+```
+
+image
+
+### <ins>**2. Run the Setup Script**</ins>
+
+```bash
+sudo ./setup.sh
+```
+
+image
+
+### <ins>**3. Build OpenROAD**</ins>
+
+```bash
+./build_openroad.sh --local --openroad-args "-DENABLE_TESTS=OFF" 
+```
+
+image
+
+
+### <ins>**4. Verify Installation**</ins>
+
+```bash
+source ./env.sh
+yosys -help  
+openroad -help
+```
+
+image
+image
+
+### <ins>**5. Run the OpenROAD Flow**</ins>
+
+```bash
+cd flow
+make
+```
+
+image
+image
+
+### <ins>**6. Launch the graphical user interface (GUI) to visualize the final layout**</ins>
+
+```bash
+ make gui_final
+```
+
+image
+
+✅ Installation Complete! We can now explore the full RTL-to-GDSII flow using OpenROAD.
+
+### <ins>**ORFS Directory Structure and File formats**</ins>
+
+OpenROAD-flow-scripts/
+
+```plaintext
+├── OpenROAD-flow-scripts             
+│   ├── docker           -> It has Docker based installation, run scripts and all saved here
+│   ├── docs             -> Documentation for OpenROAD or its flow scripts.  
+│   ├── flow             -> Files related to run RTL to GDS flow  
+|   ├── jenkins          -> It contains the regression test designed for each build update
+│   ├── tools            -> It contains all the required tools to run RTL to GDS flow
+│   ├── etc              -> Has the dependency installer script and other things
+│   ├── setup_env.sh     -> Its the source file to source all our OpenROAD rules to run the RTL to GDS flow
+```
+Inside the `flow/` Directory
+
+```plaintext
+├── flow           
+│   ├── design           -> It has built-in examples from RTL to GDS flow across different technology nodes
+│   ├── makefile         -> The automated flow runs through makefile setup
+│   ├── platform         -> It has different technology note libraries, lef files, GDS etc 
+|   ├── tutorials        
+│   ├── util            
+│   ├── scripts                 
+```
+
+image
+
+</details>
+
+
+<details>
+    <summary>Week 6 </summary>
+
+### <ins>**Physical Design using OpenLANE**</ins>
+
+### <ins>**Introduction**</ins>
+
+### <ins>**Why Open-Source EDA Matters**</ins>
+
+EDA tools are critical for the design, simulation, and verification of integrated circuits. Open-source EDA democratizes chip design, removing licensing barriers and fostering collaborative innovation. Sky130 and OpenLANE are two of the most accessible platforms for learning and building digital ICs from scratch.
+
+### <ins>**How to Talk to Computers**</ins>
+
+### <ins>**Abstraction in Digital Design**</ins>
+
+Computers operate on instructions at varying abstraction levels—software (high-level languages, OS), hardware (logic gates, flip-flops), and everything between. The pathway from code to silicon involves translation steps, each handled by specialized tools and flows.
+
+- **Software Applications → Hardware:** Higher-level programs are converted by compilers and synthesis tools into logic that can be etched onto silicon.
+
+### <ins>**Introduction to RISC-V**</ins>
+
+RISC-V is an open, royalty-free instruction set architecture (ISA) designed for flexibility and extensibility.
+
+- **Modular ISA:** Core instructions (base integer set) plus optional extensions for multiplication, atomicity, floating-point, etc.
+- **Open Ecosystem:** Enables customization for research, education, embedded systems, or high-performance applications.
+- **Support for Multiple Privilege Modes:** From lightweight embedded cores to feature-rich platforms supporting operating systems.
+
+### <ins>**SoC Design and OpenLANE**</ins>
+
+### <ins>**Components of Digital ASIC Design**</ins>
+
+Open-source digital ASIC design typically involves:
+
+- **RTL (Register Transfer Level):** The hardware description code, generally written in Verilog or VHDL.
+- **Synthesis:** Converts RTL to gate-level netlist using logic libraries.
+- **Floorplanning and Placement:** Organizes logic elements physically on the die.
+- **Routing:** Connects standard cells with metal interconnects.
+
+RTL2GDS Flow (Simplified)
+
+- **RTL (Verilog) → Synthesis → Floorplan → Placement → Routing → GDSII (final tapeout layout).**
+- OpenLANE automates this flow specifically for Sky130 PDK, handling each step and offering hooks for manual intervention or advanced configuration.
+
+### <ins>**OpenLANE and Sky130 PDK**</ins>
+
+OpenLANE is an open-source digital ASIC flow built around the Sky130 PDK.
+
+- Automated digital design flow (RTL → GDSII).
+- Integrates multiple tools (yosys for synthesis, Magic for layout viewing, OpenROAD utilities for placement/routing).
+
+Key Features:
+
+- Scriptable and repeatable design flow.
+- Detailed directory structure for managing design, scripts, reports, and resulting layout files.
+
+### <ins>**Exploring OpenLANE Directory Structure**</ins>
+
+OpenLANE organizes projects into directories for:
+
+- **Designs:** User circuits and configurations.
+- **Runs:** Per-design execution logs, results, and intermediate files.
+- **PDK:** Standard cell libraries, LEF/DEF files, rules, etc.
+- **Reports:** Timing, area, and metrics for each design step.
+
+### <ins>**Floorplanning and Placement**</ins>
+
+### <ins>**Good Floorplan vs. Bad Floorplan**</ins>
+
+A well-thought-out floorplan improves routability, performance, and power integrity:
+
+- **Utilization Factor:** Balances logic density.
+- **Aspect Ratio:** Ensures die fits target packaging.
+- **Pre-placed Cells & Decoupling Capacitors:** Ensures robust power delivery.
+- **Pin Placement:** Affects timing, congestion, and ease of testing.
+
+### <ins>**Running Floorplan in OpenLANE**</ins>
+
+- OpenLANE scripts automate much of the setup; designers review output for errors and optimization opportunities.
+
+### <ins>**Cell Design and Characterization**</ins>
+
+### <ins>**From Schematic to Spice**</ins>
+
+- **CMOS Inverter as a Reference:** Begin with basic gates (inverter), create layout in Magic, simulate in ngspice.
+- **Characterization:** Extract delay, power, threshold characteristics from SPICE simulations.
+
+### <ins>**Key Timing Parameters**</ins>
+
+- **Propagation Delay:** Time required for signal to propagate through a gate.
+- **Transition Time:** Slope of the output signal, critical for performance.
+- **Timing Thresholds:** Voltage levels at which logic state transitions occur.
+
+### <ins>**Sky130 Tech and Layout Labs**</ins>
+
+- **Magic Tool Use:** Layout editing and view, DRC checks, LEF/DEF generation from Magic-extracted layouts.
+- **PDK Files:** Provide standardized models and DRC rules for process-correct design.
+- **Troubleshooting Labs:** Real-world exercises like fixing DRC errors, adjusting poly/metal spacing, and interpreting Magic errors.
+
+### <ins>**Timing Analysis and Clock Tree**</ins>
+
+### <ins>**OpenSTA for Timing**</ins>
+
+- **Clock Setup/Hold Analysis:** Ensures that clocked elements (FFs/latches) receive valid signals at the correct time.
+- **Post-synthesis/CTS Analysis:** Includes routing details and real clock network delays.
+
+### <ins>**TritonCTS for Clock Synthesis**</ins>
+
+- **H-Tree Algorithm:** Balances clock signal distribution across chip.
+- **Signal Integrity:** Crosstalk and shielding methods to prevent spurious behavior.
+
+### <ins>**Routing, DRC, and Final Tapeout**</ins>
+
+### <ins>**TritonRoute**</ins>
+
+- Handles detailed interconnect routing, respects routing guides, and honors DRC constraints.
+- Outputs DRC-clean GDSII files for fabrication.
+
+### <ins>**Power Distribution Network (PDN)**</ins>
+
+- **Generation of Power Straps**
+- Robust connection between standard cells and chip-level supply rails.
+
+### <ins>**Useful References**</ins>
+
+- RISC-V ISA official site
+- OpenLANE: https://github.com/The-OpenROAD-Project/OpenLane
+- SkyWater Sky130: https://github.com/google/skywater-pdk
+- Magic VLSI: http://opencircuitdesign.com/magic/
+
+</details>
+
+<details>
+    <summary> Week 7 </summary>
+
+# VSDBabySoC Physical Design – Using OpenROAD
+
+This README documents the complete, step‑by‑step flow I followed to complete **Task 13** of the VSD Physical Design workshop using **OpenROAD Flow Scripts (ORFS)**.
+
+It includes **all explanations**, **all fixes**, and **all commands** needed to successfully run the VSDBabySoC design from RTL → GDS.
+
+The goal of this task is to take the **VSDBabySoC RTL**, integrate it inside **OpenROAD Flow Scripts**, and then run through:
+
+* Synthesis (Yosys)
+* Floorplan
+* Placement
+* Clock Tree Synthesis
+* Global Routing
+* Detailed Routing
+* GDS Export
+
+Because VSDBabySoC contains **custom analog blocks** (DAC, PLL), the `.lib` files are provided. However, they need **modifications** to be compatible with OpenROAD.
+
+### <ins>**Repository Structure**</ins>
+
+
+```
+OpenRoad-VSDBabySOC-Physical-Design/
+│
+├── designs/
+│   └── sky130hd/
+│       └── vsdbabysoc/
+│           ├── config.mk
+│           ├── src/
+│           │   └── vsdbabysoc.v
+│           └── lib/
+│               ├── avsddac.lib
+│               └── avsdpll.lib     ← (fixed version)
+│
+├── assets/      
+└── README.md
+```
+
+---
+
+### <ins>**Step 1 – Clone OpenROAD Flow Scripts**</ins>
+
+```bash
+git clone https://github.com/The-OpenROAD-Project/OpenROAD-flow-scripts.git
+cd OpenROAD-flow-scripts
+```
+
+Install dependencies:
+
+```bash
+sudo ./etc/DependencyInstaller.sh
+```
+
+Build ORFS tools:
+
+```bash
+./build_openroad.sh --local
+```
+
+This builds:
+
+* Yosys
+* OpenROAD
+* TritonRoute
+* KLayout export
+
+
+### <ins>**Step 2 – Add VSDBabySoC to ORFS**</ins>
+
+Inside:
+
+```
+flow/designs/sky130hd/
+```
+
+create a folder:
+
+```
+vsdbabysoc/
+```
+
+### Add Files:
+
+```
+vsdbabysoc/
+│── config.mk
+│── src/
+│   └── vsdbabysoc.v
+└── lib/
+    ├── avsddac.lib
+    └── avsdpll.lib
+```
+
+### <ins>**IMPORTANT: Fixing the Liberty Files**</ins>
+
+The PLL library (`avsdpll.lib`) originally had **invalid `//` comments**, which Liberty format does NOT support.
+
+Liberty supports only:
+
+```c
+/* comment */
+```
+
+So I fixed the file by converting all `//` lines to proper block comments.
+This prevents the `STA-0164` syntax error during floorplan.
+
+### <ins>**Config file**</ins>
+
+Now, create a config.mk file whose contents are shown below:
+
+```shell
+export DESIGN_NICKNAME = vsdbabysoc
+export DESIGN_NAME = vsdbabysoc
+export PLATFORM    = sky130hd
+
+# export VERILOG_FILES_BLACKBOX = $(DESIGN_HOME)/src/$(DESIGN_NICKNAME)/IPs/*.v
+# export VERILOG_FILES = $(sort $(wildcard $(DESIGN_HOME)/src/$(DESIGN_NICKNAME)/*.v))
+# Explicitly list the Verilog files for synthesis
+export VERILOG_FILES = $(DESIGN_HOME)/src/$(DESIGN_NICKNAME)/vsdbabysoc.v \
+                       $(DESIGN_HOME)/src/$(DESIGN_NICKNAME)/rvmyth.v \
+                       $(DESIGN_HOME)/src/$(DESIGN_NICKNAME)/clk_gate.v
+
+export SDC_FILE      = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/vsdbabysoc_synthesis.sdc
+
+export vsdbabysoc_DIR = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)
+
+export VERILOG_INCLUDE_DIRS = $(wildcard $(vsdbabysoc_DIR)/include/)
+# export SDC_FILE      = $(wildcard $(vsdbabysoc_DIR)/sdc/*.sdc)
+export ADDITIONAL_GDS  = $(wildcard $(vsdbabysoc_DIR)/gds/*.gds.gz)
+export ADDITIONAL_LEFS  = $(wildcard $(vsdbabysoc_DIR)/lef/*.lef)
+export ADDITIONAL_LIBS = $(wildcard $(vsdbabysoc_DIR)/lib/*.lib)
+# export PDN_TCL = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/pdn.tcl
+
+# Clock Configuration (vsdbabysoc specific)
+# export CLOCK_PERIOD = 20.0
+export CLOCK_PORT = CLK
+export CLOCK_NET = $(CLOCK_PORT)
+
+# Floorplanning Configuration (vsdbabysoc specific)
+export FP_PIN_ORDER_CFG = $(wildcard $(DESIGN_DIR)/pin_order.cfg)
+# export FP_SIZING = absolute
+
+export DIE_AREA   = 0 0 1600 1600
+export CORE_AREA  = 20 20 1590 1590
+
+# Placement Configuration (vsdbabysoc specific)
+export MACRO_PLACEMENT_CFG = $(wildcard $(DESIGN_DIR)/macro.cfg)
+export PLACE_PINS_ARGS = -exclude left:0-600 -exclude left:1000-1600: -exclude right:* -exclude top:* -exclude bottom:*
+# export MACRO_PLACEMENT = $(DESIGN_HOME)/$(PLATFORM)/$(DESIGN_NICKNAME)/macro_placement.cfg
+
+export TNS_END_PERCENT = 100
+export REMOVE_ABC_BUFFERS = 1
+
+# Magic Tool Configuration
+export MAGIC_ZEROIZE_ORIGIN = 0
+export MAGIC_EXT_USE_GDS = 1
+
+# CTS tuning
+export CTS_BUF_DISTANCE = 600
+export SKIP_GATE_CLONING = 1
+
+# export CORE_UTILIZATION=0.1  # Reduce this value to allow more whitespace for routing.
+```
+
+### <ins>**Step 3 – Run Synthesis**</ins>
+
+```bash
+cd flow
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk synth
+```
+
+### Common Error I Faced
+
+```
+No rule to make target '.../vsdbabysoc.v'
+```
+
+This means the design RTL wasn’t in the correct path.
+
+✔ FIX:
+Place the RTL at:
+
+```
+flow/designs/src/vsdbabysoc/vsdbabysoc.v
+```
+
+image
+
+image
+
+### <ins>**Synth check txt**</ins>
+
+image
+
+### <ins>**Synth statistics**</ins>
+
+image
+
+
+### <ins>**Step 4 – Floorplan**</ins>
+
+```bash
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk floorplan
+```
+
+### Error I Encountered
+
+```
+[ERROR STA-0164] syntax error in avsdpll.lib
+```
+
+✔ FIX: Replace all `//` with `/* ... */` in `avsdpll.lib`.
+
+image
+
+image
+
+### <ins>**Step 5 – Floorplan GUI**</ins>
+
+Launch GUI mode:
+
+```bash
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_floorplan
+```
+
+image
+
+image
+
+### <ins>**Step 6 – Placement**</ins>
+
+```bash
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk place
+```
+
+image
+
+image
+
+image
+
+image
+
+image
+
+```bash
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_place
+```
+
+image
+
+### <ins>**Heat Map**</ins>
+
+image
+
+image
+
+
+### <ins>**Step 7 – Clock Tree Synthesis (CTS)**</ins>
+
+```bash
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk cts
+```
+
+image
+
+image
+
+image
+
+### <ins>**Step 8 – Global Routing**</ins>
+
+```bash
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk route
+```
+
+image
+
+image
+
+### <ins>**Error I Encountered**</ins>
+
+```
+[ERROR GRT-0116] Global routing finished with congestion.
+```
+
+This means routing resources were insufficient.
+
+### ✔ FIX 1 — Inspect Congestion
+
+Open GUI:
+
+```
+make ... gui_floorplan
+```
+
+Enable congestion map:
+
+```
+Route → Congestion Map
+```
+
+### ✔ FIX 2 — Reduce Core Utilization
+
+In `config.mk`, set:
+
+```makefile
+CORE_UTILIZATION = 0.60
+```
+
+This spreads cells further apart → lowers routing congestion.
+
+### Re-run Routing
+
+```bash
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk route
+```
+
+
+### <ins>**Step 9 – Detailed Routing**</ins>
+
+Once congestion is solved, TritonRoute completes successfully.
+
+
+### <ins>**Step 10 – GDSII Export**</ins>
+
+```bash
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk finish
+```
+
+Output GDS is located at:
+
+```
+results/sky130hd/vsdbabysoc/base/vsdbabysoc.gds
+```
+
+
+### <ins>**Summary of All Fixes**</ins>
+
+| Error                 | Cause                           | Fix                                 |
+| --------------------- | ------------------------------- | ----------------------------------- |
+| RTL not found         | Wrong path                      | Place RTL in `flow/designs/src/...` |
+| `STA-0164`            | Liberty file used `//` comments | Convert to `/* ... */`              |
+| GUI heatmap issues    | Old OpenROAD version            | Use GUI menus, not Tcl              |
+| `GRT-0116` congestion | High core utilization           | Lower to 0.60 and inspect heatmap   |
+| GUI warnings          | Missing Wayland plugin          | Safe to ignore                      |
+
+---
+
+### <ins>**References**</ins>
+
+* OpenROAD Project: [https://github.com/The-OpenROAD-Project](https://github.com/The-OpenROAD-Project)
+* Sky130 PDK Documentation
+* VSD Physical Design Course
+
+</details>
+
+<details>
+    <summary> Week 8 </summary>
+
+### <ins>**RISC-V_core_multi_corner_sta_analysis**</ins>
+
+### <ins>**Week-3 (Post-Synthesis) vs Week-8 (Post-Route) Timing Comparison**</ins>
+
+### <ins>**Using OpenLANE, OpenROAD & OpenSTA**</ins>
+
+### <ins>**1. Overview**</ins>
+
+This repository documents the complete **Static Timing Analysis (STA)** of the **riscv_core** design across multiple **PVT corners** using:
+
+- **OpenLANE** for synthesis, placement and routing  
+- **OpenROAD** for loading post-route ODB and extracting SPEF  
+- **OpenSTA** for multi-corner timing analysis  
+
+The objective is to compare:
+
+- **Week-3:** Post-Synthesis STA (ideal interconnect, no parasitics)  
+- **Week-8:** Post-Route STA (real parasitics from SPEF, routed design)  
+
+This report includes:  
+✔ Timing tables  
+✔ All PVT corner results  
+✔ Graphs (WNS, TNS, Setup, Hold)  
+✔ Detailed explanation of timing behavior after routing  
+
+### <ins>**2. Environment & Inputs**</ins>
+
+### Software
+- OpenLANE  
+- OpenROAD  
+- OpenSTA (v2.7.0)  
+- Sky130 HD PDK (Liberty timing models)
+
+### Required Files
+- `riscv_core.odb` — Post-route OpenROAD database  
+- `riscv_core.nom.spef` — Extracted parasitics  
+- `riscv_base_post_cts.sdc` — Timing constraints  
+- 16 × Liberty files across TT, FF, SS corners  
+
+### <ins>**3. Post-Route STA TCL Script (Week-8)**</ins>
+
+This script loads the post-route design, SPEF parasitics, all 16 PVT Liberty files, runs setup/hold analysis for each corner, and writes WNS/TNS/Worst-Slack results.
+
+```tcl
+set list_of_lib_files(1)  "sky130_fd_sc_hd__tt_025C_1v80.lib"
+set list_of_lib_files(2)  "sky130_fd_sc_hd__tt_100C_1v80.lib"
+set list_of_lib_files(3)  "sky130_fd_sc_hd__ff_100C_1v65.lib"
+set list_of_lib_files(4)  "sky130_fd_sc_hd__ff_100C_1v95.lib"
+set list_of_lib_files(5)  "sky130_fd_sc_hd__ff_n40C_1v56.lib"
+set list_of_lib_files(6)  "sky130_fd_sc_hd__ff_n40C_1v65.lib"
+set list_of_lib_files(7)  "sky130_fd_sc_hd__ff_n40C_1v76.lib"
+set list_of_lib_files(8)  "sky130_fd_sc_hd__ff_n40C_1v95.lib"
+set list_of_lib_files(9)  "sky130_fd_sc_hd__ss_100C_1v40.lib"
+set list_of_lib_files(10) "sky130_fd_sc_hd__ss_100C_1v60.lib"
+set list_of_lib_files(11) "sky130_fd_sc_hd__ss_n40C_1v28.lib"
+set list_of_lib_files(12) "sky130_fd_sc_hd__ss_n40C_1v35.lib"
+set list_of_lib_files(13) "sky130_fd_sc_hd__ss_n40C_1v40.lib"
+set list_of_lib_files(14) "sky130_fd_sc_hd__ss_n40C_1v44.lib"
+set list_of_lib_files(15) "sky130_fd_sc_hd__ss_n40C_1v60.lib"
+set list_of_lib_files(16) "sky130_fd_sc_hd__ss_n40C_1v76.lib"
+
+set run_tag $::env(RUN_TAG)
+
+set_cmd_units -time ns -capacitance pF -current mA -voltage V -resistance kOhm -distance um
+set_units -time ns -capacitance pF -current mA -voltage V -resistance kOhm -distance um
+
+read_db /openlane/designs/riscv_core/runs/$run_tag/results/routing/riscv_core.odb
+read_spef /openlane/designs/riscv_core/runs/$run_tag/results/final/spef/multicorner/riscv_core.nom.spef
+current_design
+
+if {![file exists ./sta_output]} {
+    file mkdir ./sta_output
+}
+
+for {set i 1} {$i <= [array size list_of_lib_files]} {incr i} {
+
+    read_liberty $::env(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/lib/$list_of_lib_files($i)
+    read_sdc /openlane/designs/riscv_core/src/riscv_base_post_cts.sdc
+
+    if {$i == 1} {
+        exec echo -n > ./sta_output/sta_wns.txt
+        exec echo -n > ./sta_output/sta_tns.txt
+        exec echo -n > ./sta_output/sta_worst_max_slack.txt
+        exec echo -n > ./sta_output/sta_worst_min_slack.txt
+    }
+
+    exec echo -ne "$list_of_lib_files($i)    " >> ./sta_output/sta_worst_max_slack.txt
+    report_worst_slack -max >> ./sta_output/sta_worst_max_slack.txt
+
+    exec echo -ne "$list_of_lib_files($i)    " >> ./sta_output/sta_worst_min_slack.txt
+    report_worst_slack -min >> ./sta_output/sta_worst_min_slack.txt
+
+    exec echo -ne "$list_of_lib_files($i)    " >> ./sta_output/sta_tns.txt
+    report_tns >> ./sta_output/sta_tns.txt
+
+    exec echo -ne "$list_of_lib_files($i)    " >> ./sta_output/sta_wns.txt
+    report_wns >> ./sta_output/sta_wns.txt
+}
+
+exit
+````
+
+### <ins>**4. Week-3 Timing Results (Post-Synthesis)**</ins>
+
+### <ins>**Week 3 Summary Table**</ins>
+
+image
+
+### <ins>**Worst Hold Slack**</ins>
+
+<image
+
+### <ins>**Worst Setup Slack**</ins>
+
+image
+
+### <ins>**WNS**</ins>
+
+image
+
+### <ins>**TNS**</ins>
+
+image
+
+### <ins>**5. Week-8 Timing Results (Post-Route)**</ins>
+
+### <ins>**Week-8 Summary Table**</ins>
+
+image
+
+### <ins>**Worst Setup Slack**</ins>
+
+image
+
+### <ins>**Worst Hold Slack**</ins>
+
+image
+
+### <ins>**WNS**</ins>
+
+image
+
+### <ins>**TNS**</ins>
+
+image
+
+---
+
+### <ins>**6. Week-3 vs Week-8 Comparison Table**</ins>
+
+| PVT Corner   | WNS (W3) | WNS (W8) | TNS (W3) | TNS (W8)   | WHS (W3) | WHS (W8) | Setup (W3) | Setup (W8) |
+| ------------ | -------- | -------- | -------- | ---------- | -------- | -------- | ---------- | ---------- |
+| tt_025C_1v80 | 0        | -7.4403  | 0        | -7477.7690 | 0.3096   | -2.8904  | 1.106      | -7.4403    |
+| ff_100C_1v65 | 0        | -6.4158  | 0        | -6048.2212 | 0.2491   | -2.9509  | 2.4466     | -6.4158    |
+| ff_100C_1v95 | 0        | -4.7488  | 0        | -4155.6294 | 0.196    | -3.0040  | 3.8366     | -4.7488    |
+| ff_n40C_1v56 | 0        | -6.2602  | 0        | -6312.1372 | 0.2915   | -2.9085  | 1.127      | -6.2602    |
+| ff_n40C_1v65 | 0        | -5.1682  | 0        | -5053.1134 | 0.2551   | -2.9449  | 2.1219     | -5.1682    |
+| ff_n40C_1v76 | 0        | -4.2362  | 0        | -4004.4890 | 0.2243   | -2.9757  | 2.9919     | -4.2362    |
+| ss_100C_1v40 | -13.0402 | -27.9272 | -7518    | -32115     | 0.9053   | -2.2947  | -13.0402   | -27.9272   |
+| ss_100C_1v60 | -6.2777  | -18.2358 | -2911    | -20155     | 0.6420   | -2.5580  | -6.2777    | -18.2358   |
+| ss_n40C_1v28 | -52.9031 | -51.4456 | -36775   | -72154     | 1.8296   | -1.8463  | -52.9031   | -51.4456   |
+| ss_n40C_1v35 | -33.1984 | -37.8016 | -23279   | -51688     | 1.3475   | -1.9116  | -33.1984   | -37.8016   |
+| ss_n40C_1v40 | -24.6564 | -31.4799 | -17173   | -42060     | 1.1249   | -2.0751  | -24.6564   | -31.4799   |
+| ss_n40C_1v44 | -19.961  | -27.4636 | -13603   | -36005     | 0.9909   | -2.2091  | -19.961    | -27.4636   |
+| ss_n40C_1v76 | -3.9606  | -12.3806 | -1905    | -14293     | 0.5038   | -2.6962  | -3.9606    | -12.3806   |
+
+
+### <ins>**7. Interpretation of Results**</ins>
+
+### <ins>**Post-Route Timing Is Worse**</ins>
+
+Because Week-8 includes **actual interconnect parasitics** from SPEF:
+
+* Wire capacitance
+* Wire resistance
+* Via parasitics
+* Coupling between adjacent nets
+
+These increase the delay of long critical paths.
+
+### <ins>**Setup Slack Degradation**</ins>
+
+Worst corners (SS) show large setup violations:
+
+* Slow silicon
+* Low voltage
+* High wire RC
+* Long routes
+
+### <ins>**Hold Slack Degradation**</ins>
+
+Fast corners show worst hold slack:
+
+* Fast silicon
+* Higher supply voltage
+* Shorter delays → races between FF stages
+
+### <ins>**SS_n40C_x corners dominate setup**</ins>
+
+As expected: slow + low voltage = maximum delay.
+
+### <ins>**FF_n40C_x corners dominate hold**</ins>
+
+Fast + low temperature = shortest delays.
+
+</details>
+
+Perform multi-corner STA (TT, SS, FF) for the RISC-V core to evaluate timing robustness across Process-Voltage-Temperature variations.
+You analyze worst-case slack, path failures, and verify timing closure for tapeout readiness.
+
+### **Acknowledgment**
+I am thankful to [**Kunal Ghosh**](https://github.com/kunalg123) and Team **[VLSI System Design (VSD)](https://vsdiat.vlsisystemdesign.com/)** for the opportunity to participate in the ongoing **RISC-V SoC Tapeout Program**.  
+
+I also acknowledge the support of **RISC-V International**, **India Semiconductor Mission (ISM)**, **VLSI Society of India (VSI)**, and [**Efabless**](https://github.com/efabless) for making this initiative possible.  
