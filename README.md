@@ -2456,7 +2456,7 @@ git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD-flow-scri
 cd OpenROAD-flow-scripts
 ```
 
-image
+![Alt Text](Images/WE51.jpeg)
 
 ### <ins>**2. Run the Setup Script**</ins>
 
@@ -2464,7 +2464,7 @@ image
 sudo ./setup.sh
 ```
 
-image
+![Alt Text](Images/WE52.jpeg)
 
 ### <ins>**3. Build OpenROAD**</ins>
 
@@ -2472,7 +2472,7 @@ image
 ./build_openroad.sh --local --openroad-args "-DENABLE_TESTS=OFF" 
 ```
 
-image
+![Alt Text](Images/WE53.jpeg)
 
 
 ### <ins>**4. Verify Installation**</ins>
@@ -2483,8 +2483,9 @@ yosys -help
 openroad -help
 ```
 
-image
-image
+![Alt Text](Images/WE54.jpeg)
+
+![Alt Text](Images/WE55.jpeg)
 
 ### <ins>**5. Run the OpenROAD Flow**</ins>
 
@@ -2493,8 +2494,9 @@ cd flow
 make
 ```
 
-image
-image
+![Alt Text](Images/WE56.jpeg)
+
+![Alt Text](Images/WE57.jpeg)
 
 ### <ins>**6. Launch the graphical user interface (GUI) to visualize the final layout**</ins>
 
@@ -2502,7 +2504,7 @@ image
  make gui_final
 ```
 
-image
+![Alt Text](Images/WE58.jpeg)
 
 ✅ Installation Complete! We can now explore the full RTL-to-GDSII flow using OpenROAD.
 
@@ -2531,8 +2533,6 @@ Inside the `flow/` Directory
 │   ├── util            
 │   ├── scripts                 
 ```
-
-image
 
 </details>
 
@@ -2857,17 +2857,9 @@ Place the RTL at:
 flow/designs/src/vsdbabysoc/vsdbabysoc.v
 ```
 
-image
+![Alt Text](Images/WE71.jpeg)
 
-image
-
-### <ins>**Synth check txt**</ins>
-
-image
-
-### <ins>**Synth statistics**</ins>
-
-image
+![Alt Text](Images/WE72.jpeg)
 
 
 ### <ins>**Step 4 – Floorplan**</ins>
@@ -2884,9 +2876,9 @@ make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk floorplan
 
 ✔ FIX: Replace all `//` with `/* ... */` in `avsdpll.lib`.
 
-image
+![Alt Text](Images/WE73.jpeg)
 
-image
+![Alt Text](Images/WE74.jpeg)
 
 ### <ins>**Step 5 – Floorplan GUI**</ins>
 
@@ -2896,37 +2888,27 @@ Launch GUI mode:
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_floorplan
 ```
 
-image
+![Alt Text](Images/WE75.jpeg)
 
-image
+![Alt Text](Images/WE76.jpeg)
 
 ### <ins>**Step 6 – Placement**</ins>
 
 ```bash
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk place
 ```
+![Alt Text](Images/WE77.jpeg)
 
-image
+![Alt Text](Images/WE78.jpeg)
 
-image
+![Alt Text](Images/WE79.jpeg)
 
-image
+![Alt Text](Images/WE710.jpeg)
 
-image
-
-image
 
 ```bash
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk gui_place
 ```
-
-image
-
-### <ins>**Heat Map**</ins>
-
-image
-
-image
 
 
 ### <ins>**Step 7 – Clock Tree Synthesis (CTS)**</ins>
@@ -2935,11 +2917,9 @@ image
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk cts
 ```
 
-image
+![Alt Text](Images/WE711.jpeg)
 
-image
-
-image
+![Alt Text](Images/WE712.jpeg)
 
 ### <ins>**Step 8 – Global Routing**</ins>
 
@@ -2947,9 +2927,9 @@ image
 make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk route
 ```
 
-image
+![Alt Text](Images/WE713.jpeg)
 
-image
+![Alt Text](Images/WE714.jpeg)
 
 ### <ins>**Error I Encountered**</ins>
 
@@ -3137,45 +3117,45 @@ exit
 
 ### <ins>**Week 3 Summary Table**</ins>
 
-image
+![Alt Text](Images/WE81.jpeg)
 
 ### <ins>**Worst Hold Slack**</ins>
 
-<image
+![Alt Text](Images/WE82.jpeg)
 
 ### <ins>**Worst Setup Slack**</ins>
 
-image
+![Alt Text](Images/WE83.jpeg)
 
 ### <ins>**WNS**</ins>
 
-image
+![Alt Text](Images/WE84.jpeg)
 
 ### <ins>**TNS**</ins>
 
-image
+![Alt Text](Images/WE85.jpeg)
 
 ### <ins>**5. Week-8 Timing Results (Post-Route)**</ins>
 
 ### <ins>**Week-8 Summary Table**</ins>
 
-image
+![Alt Text](Images/WE86.jpeg)
 
 ### <ins>**Worst Setup Slack**</ins>
 
-image
+![Alt Text](Images/WE87.jpeg)
 
 ### <ins>**Worst Hold Slack**</ins>
 
-image
+![Alt Text](Images/WE88.jpeg)
 
 ### <ins>**WNS**</ins>
 
-image
+![Alt Text](Images/WE89.jpeg)
 
 ### <ins>**TNS**</ins>
 
-image
+![Alt Text](Images/WE810.jpeg)
 
 ---
 
